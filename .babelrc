@@ -1,14 +1,14 @@
 {
-	"presets": [
-		[
-			"@babel/preset-env",
-			{
-				"targets": {
-					"node": "current"
-				}
-			}
-		]
-	],
-	"sourceMaps": true,
-	"plugins": ["@babel/transform-runtime", "dynamic-import-node"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "sourceMaps": true,
+  "plugins": ["@babel/transform-runtime", "dynamic-import-node"]
 }
