@@ -1,5 +1,6 @@
-import memwatch from "memwatch-next";
+import memwatch from "node-memwatch";
 import routerLoader from "./router/router";
+import heapdump from "heapdump";
 
 const expressLoader = "express";
 const helmetLoader = "helmet";
@@ -45,8 +46,8 @@ const server = async (catchEm, errorHandler) => {
   if (error) throw new errorHandler(error).information("unable to load module");
   const app = express();
   app.use(helmet());
-  app.use(cors());
-  // app.use(cors({ origin: originCheck(WHITE_LIST) }));
+  // app.use(cors());
+  app.use(cors({ origin: originCheck(WHITE_LIST) }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use("/v1", router());
@@ -60,5 +61,7 @@ Promise.all([import(asyncLoader), import(errorHandler)])
   .catch(err => console.log(err));
 
 memwatch.on("leak", info => {
-  console.log(info);
+  heapdump.writeSnapshot((err, filename) => {
+    console.log('dump written to', filename);
+  });
 });
