@@ -21,18 +21,7 @@ const originCheck = whitelist => (origin, callback) => {
 };
 
 const server = async (catchEm, errorHandler) => {
-  const [
-    error,
-    [
-      { default: express },
-      { default: helmet },
-      { default: cors },
-      { default: bodyParser },
-      { WHITE_LIST },
-      { config },
-      router
-    ]
-  ] = await catchEm(
+  const [error, result] = await catchEm(
     Promise.all([
       import(expressLoader),
       import(helmetLoader),
@@ -43,7 +32,16 @@ const server = async (catchEm, errorHandler) => {
       routerLoader
     ])
   );
-  if (error) throw new errorHandler(error).information("unable to load module");
+  if(error) throw(errorHandler(error));
+  const [
+    { default: express },
+    { default: helmet },
+    { default: cors },
+    { default: bodyParser },
+    { WHITE_LIST },
+    { config },
+    router
+  ] = result;
   const app = express();
   app.use(helmet());
   // app.use(cors());
