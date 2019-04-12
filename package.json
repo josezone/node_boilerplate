@@ -15,6 +15,10 @@
   "devDependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-do-expressions": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/plugin-proposal-private-methods": "^7.4.3",
     "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/runtime": "^7.4.3",
@@ -30,7 +34,12 @@
     "express-fileupload": "^1.1.4",
     "heapdump": "^0.3.12",
     "helmet": "^3.16.0",
+    "mariadb": "^2.0.3",
+    "mysql2": "^1.6.5",
     "node-memwatch": "^1.0.1",
-    "rxjs": "^6.4.0"
+    "pg": "^7.9.0",
+    "rxjs": "^6.4.0",
+    "sequelize": "^5.3.1",
+    "tedious": "^6.1.0"
   }
 }

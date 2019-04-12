@@ -11,6 +11,7 @@ const asyncLoader = "./utility/asyncLoader";
 const errorHandler = "./utility/errorHandler";
 const whiteListLoader = "./const/cors";
 const configLoader = "./config/config";
+const dbLoader = "./config/db";
 
 const originCheck = whitelist => (origin, callback) => {
   if (whitelist.indexOf(origin) !== -1) {
@@ -29,10 +30,11 @@ const server = async (catchEm, errorHandler) => {
       import(bodyParserLoader),
       import(whiteListLoader),
       import(configLoader),
-      routerLoader
+      routerLoader,
+      import(dbLoader)
     ])
   );
-  if(error) throw(errorHandler(error));
+  if (error) throw errorHandler(error);
   const [
     { default: express },
     { default: helmet },
@@ -40,18 +42,22 @@ const server = async (catchEm, errorHandler) => {
     { default: bodyParser },
     { WHITE_LIST },
     { config },
-    router
+    router,
+    { default: Db }
   ] = result;
-  const app = express();
-  app.use(helmet());
-  // app.use(cors());
-  app.use(cors({ origin: originCheck(WHITE_LIST) }));
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-  app.use("/v1", router());
-  app.listen(config.PORT, () =>
-    console.log(`Listening on port ${config.PORT}!`)
-  );
+  const db = (await Db.init(catchEm, errorHandler, config)).connection();
+  if (db) {
+    const app = express();
+    app.use(helmet());
+    // app.use(cors());
+    app.use(cors({ origin: originCheck(WHITE_LIST) }));
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
+    app.use("/v1", router());
+    app.listen(config.PORT, () =>
+      console.log(`Listening on port ${config.PORT}!`)
+    );
+  }
 };
 
 Promise.all([import(asyncLoader), import(errorHandler)])
@@ -60,6 +66,6 @@ Promise.all([import(asyncLoader), import(errorHandler)])
 
 memwatch.on("leak", info => {
   heapdump.writeSnapshot((err, filename) => {
-    console.log('dump written to', filename);
+    console.log("dump written to", filename);
   });
 });

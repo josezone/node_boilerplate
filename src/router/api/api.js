@@ -1,4 +1,4 @@
-import userLoader from "./user";
+import userLoader from "./user.api";
 const asyncLoader = "../../utility/asyncLoader";
 const expressLoader = "express";
 

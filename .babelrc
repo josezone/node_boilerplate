@@ -10,5 +10,12 @@
     ]
   ],
   "sourceMaps": true,
-  "plugins": ["@babel/transform-runtime", "dynamic-import-node"]
+  "plugins": [
+    "@babel/transform-runtime",
+    "dynamic-import-node",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-do-expressions"
+  ]
 }
