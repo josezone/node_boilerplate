@@ -1,3 +1,5 @@
+import SequelizeMock from "sequelize-mock";
+
 const sequelizeLoader = "sequelize";
 const userModelLoader = "../model/user.model";
 const adminModelLoader = "../model/admin.model";
@@ -30,32 +32,46 @@ class Db {
       { default: adminModel },
       { default: clientModel }
     ] = result;
-    this.#Sequelize = Sequelize;
-    this.#sequelize = new Sequelize(
-      config.DATABASE_NAME,
-      config.DATABASE_USER,
-      config.DATABASE_PASSWORD,
-      {
-        host: config.DATABASE_HOST,
-        port: config.DATABASE_PORT,
-        logging: false,
-        dialect: config.DATABASE_DIALECT,
-        pool: {
-          max: 5,
-          acquire: 30000,
-          idle: 10000
+    if (config.LIFE_CYCLE === "test") {
+      this.#Sequelize = SequelizeMock;
+      this.#sequelize = new SequelizeMock();
+    } else {
+      this.#Sequelize = Sequelize;
+      this.#sequelize = new this.#Sequelize(
+        config.DATABASE_NAME,
+        config.DATABASE_USER,
+        config.DATABASE_PASSWORD,
+        {
+          host: config.DATABASE_HOST,
+          port: config.DATABASE_PORT,
+          logging: false,
+          dialect: config.DATABASE_DIALECT,
+          pool: {
+            max: 5,
+            acquire: 30000,
+            idle: 10000
+          }
         }
-      }
-    );
+      );
+    }
     [err, result] = await catchEm(this.#sequelize.authenticate());
     if (err) {
       throw errorHandler(err);
     }
     this.#connectionStatus = true;
     this.#models = {
-      user: userModel(Sequelize.Model).init(this.#sequelize, Sequelize),
-      admin: adminModel(Sequelize.Model).init(this.#sequelize, Sequelize),
-      client: clientModel(Sequelize.Model).init(this.#sequelize, Sequelize)
+      user: userModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      ),
+      admin: adminModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      ),
+      client: clientModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      )
     };
 
     Object.values(this.#models)

@@ -10,6 +10,7 @@ export default new Promise(async (asyncExport, reject) => {
   );
   if (error) {
     reject(error);
+    return false;
   }
 
   const [{ default: Router }, user] = result;
@@ -20,4 +21,5 @@ export default new Promise(async (asyncExport, reject) => {
     return router;
   };
   asyncExport(routerFn);
+  return true;
 });

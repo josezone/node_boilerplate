@@ -1,6 +1,8 @@
 import memwatch from "node-memwatch";
 import heapdump from "heapdump";
 import routerLoader from "./router/router";
+import logger from "./utility/logger";
+import config from "./config/config";
 
 const expressLoader = "express";
 const helmetLoader = "helmet";
@@ -10,7 +12,6 @@ const bodyParserLoader = "body-parser";
 const asyncLoader = "./utility/asyncLoader";
 const errorLoader = "./utility/errorHandler";
 const whiteListLoader = "./const/cors";
-const configLoader = "./config/config";
 const dbLoader = "./config/db";
 
 const originCheck = whitelist => (origin, callback) => {
@@ -21,6 +22,7 @@ const originCheck = whitelist => (origin, callback) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 const server = async (catchEm, errorHandler) => {
   let [error, result] = await catchEm(
     Promise.all([
@@ -29,7 +31,6 @@ const server = async (catchEm, errorHandler) => {
       import(corsLoader),
       import(bodyParserLoader),
       import(whiteListLoader),
-      import(configLoader),
       routerLoader,
       import(dbLoader)
     ])
@@ -41,7 +42,6 @@ const server = async (catchEm, errorHandler) => {
     { default: cors },
     { default: bodyParser },
     { default: WHITE_LIST },
-    { default: config },
     router,
     { default: Db }
   ] = result;
@@ -52,22 +52,25 @@ const server = async (catchEm, errorHandler) => {
     const app = express();
     app.use(helmet());
     // app.use(cors());
-    app.use(cors({ origin: originCheck(WHITE_LIST) }));
+    app.use(cors({ origin: originCheck(WHITE_LIST()) }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use("/v1", router(db, errorHandler));
-    app.listen(config.PORT, () =>
-      console.log(`Listening on port ${config.PORT}!`)
-    );
+    return app;
   }
 };
 
 Promise.all([import(asyncLoader), import(errorLoader)])
-  .then(([catchEm, { default: errorHandler }]) =>
-    server(catchEm.default, errorHandler)
-  )
-  .catch(err => console.log(err));
+  .then(async ([catchEm, { default: errorHandler }]) => {
+    const app = await server(catchEm.default, errorHandler);
+    app.listen(config.PORT, () =>
+      logger(`Listening on port ${config.PORT}!`, config)
+    );
+  })
+  .catch(err => logger(err, config));
 
 memwatch.on("leak", () => {
   heapdump.writeSnapshot();
 });
+
+export default server;

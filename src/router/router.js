@@ -12,6 +12,7 @@ export default new Promise(async (asyncExport, reject) => {
   );
   if (error) {
     reject(error);
+    return false;
   }
   const [{ default: Router }, api, apis] = result;
   const router = Router();
@@ -22,4 +23,5 @@ export default new Promise(async (asyncExport, reject) => {
     return router;
   };
   asyncExport(routerFn);
+  return true;
 });

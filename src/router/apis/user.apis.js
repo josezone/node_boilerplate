@@ -7,14 +7,17 @@ export default new Promise(async (asyncExport, reject) => {
   const [error, resource] = await catchEm(resourceLoader);
   if (error) {
     reject(error);
+    return false;
   }
 
   const user = (db, errorHandler) => {
     return resource({
       list(req, res) {
+        res.send("yoki");
         console.log(db, errorHandler, req, res);
       }
     });
   };
   asyncExport(user);
+  return true;
 });
