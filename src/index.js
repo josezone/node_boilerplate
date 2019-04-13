@@ -53,7 +53,7 @@ const server = async (catchEm, errorHandler) => {
     app.use(cors({ origin: originCheck(WHITE_LIST) }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    app.use("/v1", router());
+    app.use("/v1", await router(db, catchEm, errorHandler));
     app.listen(config.PORT, () =>
       console.log(`Listening on port ${config.PORT}!`)
     );

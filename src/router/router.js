@@ -1,18 +1,34 @@
 import apiLoader from "./api/api";
 import apisLoader from "./apis/apis";
 
-const asyncLoader = "../utility/asyncLoader";
 const expressLoader = "express";
 
 export default new Promise(async asyncExport => {
-  const { default: catchEm } = await import(asyncLoader);
-  const [error, [{ default: Router }, api, apis]] = await catchEm(
-    Promise.all([import(expressLoader), apiLoader, apisLoader])
-  );
-  const router = Router();
-  const routerFn = () => {
-    router.use("/api", api());
-    router.use("/apis", apis());
+  const routerFn = async (db, catchEm, errorHandler) => {
+    let [error, result] = await catchEm(
+      Promise.all([import(expressLoader), apiLoader, apisLoader])
+    );
+    if (error) {
+      console.log(errorHandler(error));
+      return;
+    }
+    const [{ default: Router }, api, apis] = result;
+    const router = Router();
+
+    [error, result] = await catchEm(
+      Promise.all([
+        api(db, catchEm, errorHandler),
+        apis(db, catchEm, errorHandler)
+      ])
+    );
+    if (error) {
+      console.log(errorHandler(error));
+      return router;
+    }
+    const [apiMethod, apisMethod] = result;
+
+    router.use("/api", apiMethod);
+    router.use("/apis", apisMethod);
     return router;
   };
   asyncExport(routerFn);

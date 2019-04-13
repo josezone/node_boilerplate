@@ -3,8 +3,8 @@ export const userModel = Model => {
     static init(sequelize, DataTypes) {
       return super.init(
         {
-          user_id: {
-            field: "user_id",
+          userId: {
+            field: "userId",
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
