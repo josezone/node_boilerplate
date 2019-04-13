@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
+
 dotenv.config();
 
-export const config = {
+export default {
   PORT: process.env.PORT,
   DATABASE_NAME: process.env.DATABASE_NAME,
   DATABASE_USER: process.env.DATABASE_USER,

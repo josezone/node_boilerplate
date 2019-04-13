@@ -1,9 +1,13 @@
 const expressLoader = "express";
-const asyncLoader = "../utility/asyncLoader";
+const asyncLoader = "./asyncLoader";
 
-export default new Promise(async asyncExport => {
+export default new Promise(async (asyncExport, reject) => {
   const { default: catchEm } = await import(asyncLoader);
   const [error, { default: Router }] = await catchEm(import(expressLoader));
+  if(error){
+    reject(error)
+  }
+
   const keyed = [
       "get",
       "read",
@@ -13,26 +17,24 @@ export default new Promise(async asyncExport => {
       "modify",
       "del",
       "delete"
-    ],
-    map = {
+    ];
+  const map = {
       list: "get",
       create: "post",
       update: "put",
       modify: "patch"
     };
   const routehandler = route => {
-    route.mergeParams = route.mergeParams ? true : false;
-    let router = Router({ mergeParams: route.mergeParams }),
-      key,
-      fn,
-      url;
+    // eslint-disable-next-line no-param-reassign
+    route.mergeParams = !!route.mergeParams;
+    const router = Router({ mergeParams: route.mergeParams });
 
     if (route.middleware) router.use(route.middleware);
 
-    const routeCallback = (req, res, next, id) => (err, data) => {
+    const routeCallback = (req, res, next) => (err, data) => {
       if (err) return res.status(404).send(err);
       req[route.id] = data;
-      next();
+      return next();
     };
 
     const routerCallback = (req, res, next, id) => {
@@ -44,9 +46,10 @@ export default new Promise(async asyncExport => {
     }
 
     Object.keys(route).forEach(key => {
-      fn = map[key] || key;
+      const fn = map[key] || key;
       if (typeof router[fn] === "function") {
-        url = ~keyed.indexOf(key) ? "/:" + route.id : "/";
+        // eslint-disable-next-line no-bitwise
+        const url = ~keyed.indexOf(key) ? `/:${route.id}` : "/";
         router[fn](url, route[key]);
       }
     });

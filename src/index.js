@@ -1,6 +1,6 @@
 import memwatch from "node-memwatch";
-import routerLoader from "./router/router";
 import heapdump from "heapdump";
+import routerLoader from "./router/router";
 
 const expressLoader = "express";
 const helmetLoader = "helmet";
@@ -8,7 +8,7 @@ const corsLoader = "cors";
 const bodyParserLoader = "body-parser";
 
 const asyncLoader = "./utility/asyncLoader";
-const errorHandler = "./utility/errorHandler";
+const errorLoader = "./utility/errorHandler";
 const whiteListLoader = "./const/cors";
 const configLoader = "./config/config";
 const dbLoader = "./config/db";
@@ -22,7 +22,7 @@ const originCheck = whitelist => (origin, callback) => {
 };
 
 const server = async (catchEm, errorHandler) => {
-  const [error, result] = await catchEm(
+  let [error, result] = await catchEm(
     Promise.all([
       import(expressLoader),
       import(helmetLoader),
@@ -40,12 +40,14 @@ const server = async (catchEm, errorHandler) => {
     { default: helmet },
     { default: cors },
     { default: bodyParser },
-    { WHITE_LIST },
-    { config },
+    { default: WHITE_LIST },
+    { default: config },
     router,
     { default: Db }
   ] = result;
-  const db = (await Db.init(catchEm, errorHandler, config)).connection();
+  [error, result] = await catchEm(Db.init(catchEm, errorHandler, config));
+  if (error) throw errorHandler(error);
+  const db = result.connection();
   if (db) {
     const app = express();
     app.use(helmet());
@@ -53,19 +55,19 @@ const server = async (catchEm, errorHandler) => {
     app.use(cors({ origin: originCheck(WHITE_LIST) }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    app.use("/v1", await router(db, catchEm, errorHandler));
+    app.use("/v1", router(db, errorHandler));
     app.listen(config.PORT, () =>
       console.log(`Listening on port ${config.PORT}!`)
     );
   }
 };
 
-Promise.all([import(asyncLoader), import(errorHandler)])
-  .then(([catchEm, { errorHandler }]) => server(catchEm.default, errorHandler))
+Promise.all([import(asyncLoader), import(errorLoader)])
+  .then(([catchEm, { default: errorHandler }]) =>
+    server(catchEm.default, errorHandler)
+  )
   .catch(err => console.log(err));
 
-memwatch.on("leak", info => {
-  heapdump.writeSnapshot((err, filename) => {
-    console.log("dump written to", filename);
-  });
+memwatch.on("leak", () => {
+  heapdump.writeSnapshot();
 });

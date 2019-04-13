@@ -1,21 +1,22 @@
 import userLoader from "./user.apis";
+
 const expressLoader = "express";
+const asyncLoader = "../../utility/asyncLoader";
 
-export default new Promise(async asyncExport => {
-  const routerFn = async (db, catchEm, errorHandler) => {
-    const [error, result] = await catchEm(
-      Promise.all([import(expressLoader), userLoader])
-    );
+export default new Promise(async (asyncExport, reject) => {
+  const { default: catchEm } = await import(asyncLoader);
+  const [error, result] = await catchEm(
+    Promise.all([import(expressLoader), userLoader])
+  );
+  if (error) {
+    reject(error);
+  }
 
-    if (error) {
-      console.log(errorHandler(error));
-      return;
-    }
+  const [{ default: Router }, user] = result;
+  const router = Router();
 
-    const [{ default: Router }, user] = result;
-    const router = Router();
-
-    router.use("/user", user);
+  const routerFn = (db, errorHandler) => {
+    router.use("/user", user(db, errorHandler));
     return router;
   };
   asyncExport(routerFn);

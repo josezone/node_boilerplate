@@ -1,4 +1,4 @@
-export const adminModel = Model => {
+const adminModel = Model => {
   class admin extends Model {
     static init(sequelize, DataTypes) {
       return super.init(
@@ -39,3 +39,5 @@ export const adminModel = Model => {
   }
   return admin;
 };
+
+export default adminModel;

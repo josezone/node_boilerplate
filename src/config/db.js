@@ -5,8 +5,11 @@ const clientModelLoader = "../model/client.model";
 
 class Db {
   #connectionStatus;
+
   #models;
+
   #sequelize;
+
   #Sequelize;
 
   init = async (catchEm, errorHandler, config) => {
@@ -19,14 +22,13 @@ class Db {
       ])
     );
     if (err) {
-      console.log(errorHandler(err));
-      return this;
+      throw errorHandler(err);
     }
     const [
       { default: Sequelize },
-      { userModel },
-      { adminModel },
-      { clientModel }
+      { default: userModel },
+      { default: adminModel },
+      { default: clientModel }
     ] = result;
     this.#Sequelize = Sequelize;
     this.#sequelize = new Sequelize(
@@ -47,8 +49,7 @@ class Db {
     );
     [err, result] = await catchEm(this.#sequelize.authenticate());
     if (err) {
-      console.log(errorHandler(err));
-      return this;;
+      throw errorHandler(err);
     }
     this.#connectionStatus = true;
     this.#models = {
@@ -63,18 +64,18 @@ class Db {
 
     [err, result] = await catchEm(this.#sequelize.sync({ force: false }));
     if (err) {
-      console.log(errorHandler(err));
-      return this;;
+      throw errorHandler(err);
     }
     return this;
   };
 
-  connection = () => do {
-    if (this.#connectionStatus)
-      ({
+  connection = () => {
+    if (this.#connectionStatus) {
+      return {
         ...this.#models
-      });
-    else undefined;
+      };
+    }
+    return false;
   };
 }
 

@@ -1,1 +1,1 @@
-export const WHITE_LIST = ["http://localhost:4000"];
+export default ["http://localhost:4000"];
