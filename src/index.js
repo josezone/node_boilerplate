@@ -73,6 +73,7 @@ const server = async (catchEm, errorHandler) => {
         .setError(err.error)
         .setMessage(err.message)
         .execute();
+      console.log(res, next, loggerData);
     });
     return app;
   }

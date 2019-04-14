@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.4.3",
+    "@elastic/elasticsearch": "^7.0.0-rc.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",
