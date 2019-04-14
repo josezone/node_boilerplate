@@ -1,7 +1,7 @@
 module.exports = {
   parser: "babel-eslint",
   extends: ["airbnb-base", "plugin:jest/recommended", "prettier"],
-  plugins: ["import", "jest", "prettier", "babel"],
+  plugins: ["import", "jest", "prettier", "babel", "spellcheck"],
   env: {
     node: true,
     "jest/globals": true

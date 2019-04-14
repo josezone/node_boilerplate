@@ -12,7 +12,8 @@ export default new Promise(async (asyncExport, reject) => {
 
   const user = (db, errorHandler) => {
     return resource({
-      list(req, res) {
+      list(req, res, next) {
+        // next({error: "data"})
         res.send("yoki");
         console.log(db, errorHandler, req, res);
       }

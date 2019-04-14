@@ -10,5 +10,6 @@ export default {
   DATABASE_HOST: process.env.DATABASE_HOST,
   DATABASE_PORT: process.env.DATABASE_PORT,
   LIFE_CYCLE: process.env.LIFE_CYCLE,
+  ELASTIC_SEARCH_HOST: process.env.ELASTIC_SEARCH_HOST,
   DATABASE_DIALECT: "mysql"
 };

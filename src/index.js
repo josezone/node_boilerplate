@@ -13,6 +13,8 @@ const asyncLoader = "./utility/asyncLoader";
 const errorLoader = "./utility/errorHandler";
 const whiteListLoader = "./const/cors";
 const dbLoader = "./config/db";
+const onHeadersLoader = "./middlewares/timerHandler";
+const loggerBuilderLoader = "./builders/logger.builder";
 
 const originCheck = whitelist => (origin, callback) => {
   if (whitelist.indexOf(origin) !== -1) {
@@ -32,7 +34,9 @@ const server = async (catchEm, errorHandler) => {
       import(bodyParserLoader),
       import(whiteListLoader),
       routerLoader,
-      import(dbLoader)
+      import(dbLoader),
+      import(onHeadersLoader),
+      import(loggerBuilderLoader)
     ])
   );
   if (error) throw errorHandler(error);
@@ -43,19 +47,33 @@ const server = async (catchEm, errorHandler) => {
     { default: bodyParser },
     { default: WHITE_LIST },
     router,
-    { default: Db }
+    { default: Db },
+    { default: onHeaders },
+    { default: LoggerBuilder }
   ] = result;
   [error, result] = await catchEm(Db.init(catchEm, errorHandler, config));
   if (error) throw errorHandler(error);
   const db = result.connection();
   if (db) {
     const app = express();
+    app.use(onHeaders);
     app.use(helmet());
     // app.use(cors());
     app.use(cors({ origin: originCheck(WHITE_LIST()) }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use("/v1", router(db, errorHandler));
+    app.use((err, req, res, next) => {
+      const loggerData = new LoggerBuilder()
+        .createExecutedAt(req.startAt)
+        .setReqIp(req.ip)
+        .setMethod(req.method)
+        .setOriginalUrl(req.originalUrl)
+        .setStatusCode(err.statusCode)
+        .setError(err.error)
+        .setMessage(err.message)
+        .execute();
+    });
     return app;
   }
 };

@@ -29,9 +29,7 @@ export default new Promise(async (asyncExport, reject) => {
     // eslint-disable-next-line no-param-reassign
     route.mergeParams = !!route.mergeParams;
     const router = Router({ mergeParams: route.mergeParams });
-
-    if (route.middleware) router.use(route.middleware);
-
+    
     Object.keys(route).forEach(key => {
       const fn = map[key] || key;
       if (typeof router[fn] === "function") {
