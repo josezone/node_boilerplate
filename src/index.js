@@ -64,16 +64,17 @@ const server = async (catchEm, errorHandler) => {
     app.use(bodyParser.json());
     app.use("/v1", router(db, errorHandler));
     app.use((err, req, res, next) => {
-      const loggerData = new LoggerBuilder()
-        .createExecutedAt(req.startAt)
-        .setReqIp(req.ip)
-        .setMethod(req.method)
-        .setOriginalUrl(req.originalUrl)
+      new LoggerBuilder(req)
+        .createExecutedAt()
+        .setReqIp()
+        .setMethod()
+        .setOriginalUrl()
+        .setUserCountry()
         .setStatusCode(err.statusCode)
         .setError(err.error)
         .setMessage(err.message)
         .execute();
-      console.log(res, next, loggerData);
+      console.log(res, next);
     });
     return app;
   }

@@ -64,6 +64,7 @@
     "node-memwatch": "^1.0.1",
     "on-headers": "^1.0.2",
     "pg": "^7.9.0",
+    "request-country": "^0.1.4",
     "rxjs": "^6.4.0",
     "sequelize": "^5.3.1",
     "tedious": "^6.1.0"

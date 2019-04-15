@@ -1,51 +1,60 @@
+import requestCountry from "request-country";
+
+import elasticsearch from "../config/elasticSearch";
+
 class Logger {
-  createExecutedAt(time) {
-    this.executedAt = time;
-    this.executionTime = Date.now() - time;
+  #req;
+
+  #res;
+
+  constructor(req){
+    this.#req = req;
+    this.#res = {};
+  }
+
+  createExecutedAt() {
+    this.#res.executed_at = this.#req.startAt;
+    this.#res.execution_time = Date.now() - this.#req.startAt;
     return this;
   }
 
-  setReqIp(ip) {
-    this.reqIp = ip;
+  setReqIp() {
+    this.#res.req_ip = this.#req.ip;
     return this;
   }
 
-  setMethod(method) {
-    this.method = method;
+  setMethod() {
+    this.#res.method = this.#req.method;
     return this;
   }
 
-  setOriginalUrl(originalUrl) {
-    this.originalUrl = originalUrl;
+  setOriginalUrl() {
+    this.#res.original_url = this.#req.originalUrl;
+    return this;
+  }
+
+  setUserCountry() {
+    this.#res.country = requestCountry(this.#req);
     return this;
   }
 
   setStatusCode(statusCode) {
-    this.statusCode = statusCode || 500;
+    this.#res.status_code = statusCode || 500;
     return this;
   }
 
   setError(error) {
-    this.error = error;
+    this.#res.error = error;
     return this;
   }
 
   setMessage(message) {
-    this.message = message;
+    this.#res.message = message;
     return this;
   }
 
   execute() {
-    return {
-      executedAt: this.executedAt,
-      executionTime: this.executionTime,
-      reqIp: this.reqIp,
-      method: this.method,
-      originalUrl: this.originalUrl,
-      statusCode: this.statusCode,
-      error: this.error,
-      message: this.message
-    };
+    elasticsearch.elasticLog(this.#res);
   }
 }
 export default Logger;
