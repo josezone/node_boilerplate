@@ -1,13 +1,7 @@
 const expressLoader = "express";
-const asyncLoader = "./asyncLoader";
 
-export default new Promise(async (asyncExport, reject) => {
-  const { default: catchEm } = await import(asyncLoader);
-  const [error, { default: Router }] = await catchEm(import(expressLoader));
-  if (error) {
-    reject(error);
-    return false;
-  }
+export default new Promise(async asyncExport => {
+  const { default: Router } = await import(expressLoader);
 
   const keyed = [
     "get",
@@ -29,7 +23,7 @@ export default new Promise(async (asyncExport, reject) => {
     // eslint-disable-next-line no-param-reassign
     route.mergeParams = !!route.mergeParams;
     const router = Router({ mergeParams: route.mergeParams });
-    
+
     Object.keys(route).forEach(key => {
       const fn = map[key] || key;
       if (typeof router[fn] === "function") {

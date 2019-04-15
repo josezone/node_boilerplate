@@ -1,19 +1,27 @@
-import elasticSearch from "@elastic/elasticsearch";
-import config from "./config";
-import logger from "../utility/logger";
+const elasticSearchLoader = "@elastic/elasticsearch";
+const configLoader = "./config";
 
 class ElasticLog {
-  #client
+  #client;
 
-  constructor(){
-    this.#client = new elasticSearch.Client({ node: config.ELASTIC_SEARCH_HOST });
+  constructor() {
+    (async () => {
+      const [
+        { default: elasticSearch },
+        { default: config }
+      ] = await Promise.all([
+        import(elasticSearchLoader),
+        import(configLoader)
+      ]);
 
-    this.#client.indices.create({ index: "node_error_log" },(error)=>{
-      const err = error.message.replace(/^ResponseError: /, "");
-      if(err !== "resource_already_exists_exception"){
-        logger(err)
-      }
-    });
+      this.#client = new elasticSearch.Client({
+        node: config.ELASTIC_SEARCH_HOST
+      });
+
+      this.#client.indices.create({ index: "node_error_log" }, error => {
+        error.message.replace(/^ResponseError: /, "");
+      });
+    })();
   }
 
   elasticLog = body => {

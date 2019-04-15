@@ -52,7 +52,6 @@ const server = async (catchEm, errorHandler) => {
     { default: LoggerBuilder }
   ] = result;
   [error, result] = await catchEm(Db.init(catchEm, errorHandler, config));
-  if (error) throw errorHandler(error);
   const db = result.connection();
   if (db) {
     const app = express();
@@ -80,14 +79,14 @@ const server = async (catchEm, errorHandler) => {
   }
 };
 
-Promise.all([import(asyncLoader), import(errorLoader)])
-  .then(async ([catchEm, { default: errorHandler }]) => {
+Promise.all([import(asyncLoader), import(errorLoader)]).then(
+  async ([catchEm, { default: errorHandler }]) => {
     const app = await server(catchEm.default, errorHandler);
     app.listen(config.PORT, () =>
       logger(`Listening on port ${config.PORT}!`, config)
     );
-  })
-  .catch(err => logger(err, config));
+  }
+);
 
 memwatch.on("leak", () => {
   heapdump.writeSnapshot();

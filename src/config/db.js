@@ -13,17 +13,13 @@ class Db {
   #Sequelize;
 
   init = async (catchEm, errorHandler, config) => {
-    let [err, result] = await catchEm(
-      Promise.all([
-        import(sequelizeLoader),
-        import(userModelLoader),
-        import(adminModelLoader),
-        import(clientModelLoader)
-      ])
-    );
-    if (err) {
-      throw errorHandler(err);
-    }
+    let result = await Promise.all([
+      import(sequelizeLoader),
+      import(userModelLoader),
+      import(adminModelLoader),
+      import(clientModelLoader)
+    ]);
+
     const [
       { default: Sequelize },
       { default: userModel },
@@ -47,10 +43,8 @@ class Db {
         }
       }
     );
-    [err, result] = await catchEm(this.#sequelize.authenticate());
-    if (err) {
-      throw errorHandler(err);
-    }
+    result = await this.#sequelize.authenticate();
+
     this.#connectionStatus = true;
     this.#models = {
       user: userModel(this.#Sequelize.Model).init(
@@ -71,10 +65,7 @@ class Db {
       .filter(model => typeof model.associate === "function")
       .forEach(model => model.associate(this.#models));
 
-    [err, result] = await catchEm(this.#sequelize.sync({ force: false }));
-    if (err) {
-      throw errorHandler(err);
-    }
+    result = await this.#sequelize.sync({ force: false });
     return this;
   };
 

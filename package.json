@@ -60,6 +60,7 @@
     "heapdump": "^0.3.12",
     "helmet": "^3.16.0",
     "mariadb": "^2.0.3",
+    "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "node-memwatch": "^1.0.1",
     "on-headers": "^1.0.2",

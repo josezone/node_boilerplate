@@ -7,7 +7,7 @@ class Logger {
 
   #res;
 
-  constructor(req){
+  constructor(req) {
     this.#req = req;
     this.#res = {};
   }
@@ -55,6 +55,7 @@ class Logger {
 
   execute() {
     elasticsearch.elasticLog(this.#res);
+    return false;
   }
 }
 export default Logger;

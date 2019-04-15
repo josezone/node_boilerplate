@@ -1,14 +1,7 @@
 import resourceLoader from "../../utility/routeHandler";
 
-const asyncLoader = "../../utility/asyncLoader";
-
-export default new Promise(async (asyncExport, reject) => {
-  const { default: catchEm } = await import(asyncLoader);
-  const [error, resource] = await catchEm(resourceLoader);
-  if (error) {
-    reject(error);
-    return false;
-  }
+export default new Promise(async asyncExport => {
+  const resource = await resourceLoader;
 
   const user = (db, errorHandler) => {
     return resource({
