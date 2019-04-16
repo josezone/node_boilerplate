@@ -12,19 +12,19 @@ describe("Create user", () => {
       .get("/v1/api/user")
       .set("Origin", data)
       .expect(200);
-  });
+  }, 10000);
   test("It should response the GET method apis", async () => {
     const server = await app(catchEm, errorHandler);
     return request(server)
       .get("/v1/apis/user")
       .set("Origin", data)
       .expect(200);
-  });
+  }, 10000);
   test("It should response the PATCH method apis with 404", async () => {
     const server = await app(catchEm, errorHandler);
     return request(server)
       .patch("/v1/apis/user")
       .set("Origin", data)
       .expect(404);
-  });
+  }, 10000);
 });

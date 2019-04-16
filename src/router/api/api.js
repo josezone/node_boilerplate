@@ -9,6 +9,12 @@ export default new Promise(async asyncExport => {
   const router = Router();
 
   const routerFn = (db, errorHandler) => {
+    /**
+     * @swagger
+     * /v1/api/users:
+     *    get:
+     *      description: This should return all users
+     */
     router.use("/user", user(db, errorHandler));
     return router;
   };
