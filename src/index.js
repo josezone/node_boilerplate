@@ -3,6 +3,7 @@ import heapdump from "heapdump";
 import routerLoader from "./router/router";
 import logger from "./utility/logger";
 import config from "./config/config";
+import swaggerDoc from "./config/swaggerDoc";
 
 const expressLoader = "express";
 const helmetLoader = "helmet";
@@ -15,18 +16,20 @@ const whiteListLoader = "./const/cors";
 const dbLoader = "./config/db";
 const onHeadersLoader = "./middlewares/timerHandler";
 const loggerBuilderLoader = "./builders/logger.builder";
-const swaggerDocLoader = "./config/swaggerDoc";
+// const swaggerDocLoader = "./config/swaggerDoc";
 
 /**
  * @param {array} whitelist list of allowed origins
  */
-const originCheck = whitelist => (origin, callback) => {
-  if (whitelist.indexOf(origin) !== -1) {
-    callback(null, true);
-  } else {
-    callback(new Error("Not allowed by CORS"));
-  }
-};
+function originCheck(whitelist) {
+  return function originCb(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  };
+}
 
 /**
  * Controller file for node
@@ -34,7 +37,7 @@ const originCheck = whitelist => (origin, callback) => {
  * @param {function} errorHandler custom error formatter method
  */
 // eslint-disable-next-line consistent-return
-const server = async (catchEm, errorHandler) => {
+async function server(catchEm, errorHandler) {
   let [error, result] = await catchEm(
     Promise.all([
       import(expressLoader),
@@ -45,8 +48,7 @@ const server = async (catchEm, errorHandler) => {
       routerLoader,
       import(dbLoader),
       import(onHeadersLoader),
-      import(loggerBuilderLoader),
-      import(swaggerDocLoader)
+      import(loggerBuilderLoader)
     ])
   );
   if (error) throw errorHandler(error);
@@ -59,8 +61,7 @@ const server = async (catchEm, errorHandler) => {
     router,
     { default: Db },
     { default: onHeaders },
-    { default: LoggerBuilder },
-    { default: swaggerDoc }
+    { default: LoggerBuilder }
   ] = result;
   [error, result] = await catchEm(Db.init(catchEm, errorHandler, config));
   const db = result.connection();
@@ -72,7 +73,9 @@ const server = async (catchEm, errorHandler) => {
     app.use(cors({ origin: originCheck(WHITE_LIST()) }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    swaggerDoc(app);
+    if (config.LIFE_CYCLE === "stage" || config.LIFE_CYCLE === "dev") {
+      swaggerDoc(app);
+    }
     app.use("/v1", router(db, errorHandler));
     app.use((err, req, res, next) => {
       new LoggerBuilder(req)
@@ -89,7 +92,7 @@ const server = async (catchEm, errorHandler) => {
     });
     return app;
   }
-};
+}
 
 Promise.all([import(asyncLoader), import(errorLoader)]).then(
   async ([catchEm, { default: errorHandler }]) => {

@@ -12,7 +12,7 @@ class Db {
 
   #Sequelize;
 
-  init = async (catchEm, errorHandler, config) => {
+  async init(catchEm, errorHandler, config) {
     let result = await Promise.all([
       import(sequelizeLoader),
       import(userModelLoader),
@@ -67,16 +67,16 @@ class Db {
 
     result = await this.#sequelize.sync({ force: false });
     return this;
-  };
+  }
 
-  connection = () => {
+  connection() {
     if (this.#connectionStatus) {
       return {
         ...this.#models
       };
     }
     return false;
-  };
+  }
 }
 
 export default new Db();

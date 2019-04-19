@@ -16,7 +16,8 @@
  *  id1 --> result[null, array];
  *  id1 --> error[error];
  */
- 
-const asyncLoader = promise =>
-  promise.then(data => [null, data]).catch(err => [err]);
+
+function asyncLoader(promise) {
+  return promise.then(data => [null, data]).catch(err => [err]);
+}
 export default asyncLoader;

@@ -2,22 +2,16 @@ import userLoader from "./user.api";
 
 const expressLoader = "express";
 
-export default new Promise(async asyncExport => {
+export default new Promise(async function api(asyncExport) {
   const result = await Promise.all([import(expressLoader), userLoader]);
 
   const [{ default: Router }, user] = result;
   const router = Router();
 
-  const routerFn = (db, errorHandler) => {
-    /**
-     * @swagger
-     * /v1/api/users:
-     *    get:
-     *      description: This should return all users
-     */
+  function routerFn(db, errorHandler) {
     router.use("/user", user(db, errorHandler));
     return router;
-  };
+  }
   asyncExport(routerFn);
   return true;
 });

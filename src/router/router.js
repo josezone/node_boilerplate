@@ -3,7 +3,7 @@ import apisLoader from "./apis/apis";
 
 const expressLoader = "express";
 
-export default new Promise(async asyncExport => {
+export default new Promise(async function routers(asyncExport) {
   const result = await Promise.all([
     import(expressLoader),
     apiLoader,
@@ -13,11 +13,11 @@ export default new Promise(async asyncExport => {
   const [{ default: Router }, api, apis] = result;
   const router = Router();
 
-  const routerFn = (db, errorHandler) => {
+  function routerFn(db, errorHandler) {
     router.use("/api", api(db, errorHandler));
     router.use("/apis", apis(db, errorHandler));
     return router;
-  };
+  }
   asyncExport(routerFn);
   return true;
 });

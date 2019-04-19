@@ -4,9 +4,11 @@ function recordStartTime() {
   this.startAt = Date.now();
 }
 
-export default (req, res, next) => {
+function timerHandler(req, res, next) {
   req.startAt = undefined;
   recordStartTime.call(req);
   onHeaders(res, recordStartTime);
   next();
-};
+}
+
+export default timerHandler;

@@ -1,4 +1,4 @@
-const manageError = (msg, url, line, col, e) => {
+function manageError(msg, url, line, col, e) {
   let stack;
   const err = msg.replace(/^Error: /, "");
   if (e) {
@@ -14,10 +14,10 @@ const manageError = (msg, url, line, col, e) => {
     const colValue = col || "?";
     stack = `${url}:${lineValue}:${colValue}`;
   }
-  return (`${err}\n${stack}`).substr(0, 150);
-};
+  return `${err}\n${stack}`.substr(0, 150);
+}
 
-const errorHandler = str => {
+function errorHandler(str) {
   let errorData;
   if (typeof str === "string") {
     errorData = manageError(str, undefined, undefined, undefined, undefined);
@@ -25,6 +25,6 @@ const errorHandler = str => {
     errorData = manageError(str.message, undefined, undefined, undefined, str);
   }
   return errorData;
-};
+}
 
 export default errorHandler;

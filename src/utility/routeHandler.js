@@ -1,6 +1,6 @@
 const expressLoader = "express";
 
-export default new Promise(async asyncExport => {
+export default new Promise(async function asyncLoader(asyncExport) {
   const { default: Router } = await import(expressLoader);
 
   const keyed = [
@@ -19,7 +19,8 @@ export default new Promise(async asyncExport => {
     update: "put",
     modify: "patch"
   };
-  const routehandler = route => {
+
+  function routehandler(route) {
     // eslint-disable-next-line no-param-reassign
     route.mergeParams = !!route.mergeParams;
     const router = Router({ mergeParams: route.mergeParams });
@@ -34,7 +35,8 @@ export default new Promise(async asyncExport => {
     });
 
     return router;
-  };
+  }
+  
   asyncExport(routehandler);
   return true;
 });

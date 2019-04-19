@@ -1,0 +1,93 @@
+openapi: 3.0.1
+info:
+  title: Node
+  description: This is a node server with JWT based authentication
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/v1
+  - url: https://localhost:3001/v1
+paths:
+  /api/user:
+    post:
+      tags:
+        - User
+      summary: login the user
+      operationId: login
+      requestBody:
+        description: Login user api
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/LoginSuccess"
+                  error:
+                    type: string
+                  message:
+                    type: string
+                    enum:
+                      - Login success
+                  status:
+                    type: integer
+        405:
+          description: Invalid input
+          content: {}
+components:
+  schemas:
+    LoginSuccess:
+      type: object
+      properties:
+        token:
+          type: string
+        role:
+          type: string
+          enum:
+            - client
+            - admin
+      example:
+        role: client
+        token: token
+      xml:
+        name: LoginSuccess
+    inline_response_200:
+      type: object
+      properties:
+        status:
+          type: integer
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/LoginSuccess"
+        message:
+          type: string
+          enum:
+            - Login success
+      example:
+        data:
+          role: client
+          token: token
+        error: error
+        message: Login success
+        status: 0
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      example:
+        password: password
+        email: email
+      xml:
+        name: Login

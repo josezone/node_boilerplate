@@ -20,6 +20,17 @@ const userModel = Model => {
             field: "password",
             allowNull: false,
             type: DataTypes.STRING
+          },
+          registerationToken: {
+            field: "registerationToken",
+            allowNull: true,
+            type: DataTypes.STRING
+          },
+          status: {
+            field: "status",
+            allowNull: false,
+            type: DataTypes.ENUM,
+            values: ["Inactive", "Active", "Deleted"]
           }
         },
         {
@@ -32,4 +43,4 @@ const userModel = Model => {
   return user;
 };
 
-export default userModel
+export default userModel;

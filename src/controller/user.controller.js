@@ -1,13 +1,30 @@
-class UserController {
-  createUser = () => {};
+const rxjsLoader = "rxjs";
 
-  completeRegisteration = () => {};
+export default new Promise(async function users(asyncExport) {
+  const { Observable } = await import(rxjsLoader);
+  class UserController {
+    static createUserCb(email, db, errorHandler) {
+      return function observerCb(observer) {
+        console.log(email, db, errorHandler);
+        observer.next({ status: 200, body: { data: "ok" } });
+      };
+    }
 
-  forgotPassword = () => {};
+    createUser(email, db, errorHandler) {
+      return Observable.create(
+        this.constructor.createUserCb(email, db, errorHandler)
+      );
+    }
 
-  restPassword = () => {};
+    completeRegisteration = () => {};
 
-  changePassword = () => {};
-}
+    forgotPassword = () => {};
 
-export default new UserController();
+    restPassword = () => {};
+
+    changePassword = () => {};
+  }
+
+  asyncExport(new UserController());
+  return true;
+});

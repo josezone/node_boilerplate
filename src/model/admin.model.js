@@ -24,6 +24,12 @@ const adminModel = Model => {
             field: "userImage",
             allowNull: true,
             type: DataTypes.STRING
+          },
+          status: {
+            field: "status",
+            allowNull: false,
+            type: DataTypes.ENUM,
+            values: ["Inactive", "Active", "Deleted"]
           }
         },
         {
