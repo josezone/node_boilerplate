@@ -18,11 +18,11 @@ const userModel = Model => {
           },
           password: {
             field: "password",
-            allowNull: false,
+            allowNull: true,
             type: DataTypes.STRING
           },
-          registerationToken: {
-            field: "registerationToken",
+          registrationToken: {
+            field: "registrationToken",
             allowNull: true,
             type: DataTypes.STRING
           },
@@ -30,7 +30,7 @@ const userModel = Model => {
             field: "status",
             allowNull: false,
             type: DataTypes.ENUM,
-            values: ["Inactive", "Active", "Deleted"]
+            values: ["Inactive", "Active", "Deleted", "Register"]
           }
         },
         {

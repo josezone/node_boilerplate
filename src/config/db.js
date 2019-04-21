@@ -1,3 +1,5 @@
+import config from "./config";
+
 const sequelizeLoader = "sequelize";
 const userModelLoader = "../model/user.model";
 const adminModelLoader = "../model/admin.model";
@@ -12,7 +14,7 @@ class Db {
 
   #Sequelize;
 
-  async init(catchEm, errorHandler, config) {
+  async init() {
     let result = await Promise.all([
       import(sequelizeLoader),
       import(userModelLoader),

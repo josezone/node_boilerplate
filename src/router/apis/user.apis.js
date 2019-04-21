@@ -3,11 +3,11 @@ import resourceLoader from "../../utility/routeHandler";
 export default new Promise(async asyncExport => {
   const resource = await resourceLoader;
 
-  function user(db, errorHandler) {
+  function user(db) {
     return resource({
       list(req, res) {
         res.send("yoki");
-        console.log(db, errorHandler, req, res);
+        console.log(db, req);
       }
     });
   }

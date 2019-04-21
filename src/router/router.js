@@ -13,9 +13,9 @@ export default new Promise(async function routers(asyncExport) {
   const [{ default: Router }, api, apis] = result;
   const router = Router();
 
-  function routerFn(db, errorHandler) {
-    router.use("/api", api(db, errorHandler));
-    router.use("/apis", apis(db, errorHandler));
+  function routerFn(db) {
+    router.use("/api", api(db));
+    router.use("/apis", apis(db));
     return router;
   }
   asyncExport(routerFn);

@@ -8,8 +8,8 @@ export default new Promise(async function apis(asyncExport) {
   const [{ default: Router }, user] = result;
   const router = Router();
 
-  function routerFn(db, errorHandler) {
-    router.use("/user", user(db, errorHandler));
+  function routerFn(db) {
+    router.use("/user", user(db));
     return router;
   }
   asyncExport(routerFn);

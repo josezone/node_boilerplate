@@ -10,15 +10,21 @@ export default new Promise(async asyncExport => {
     import(rxjsLoader)
   ]);
 
-  function user(db, errorHandler) {
+  function user(db) {
     return resource({
-      create({ email }, res, next) {
+      create(
+        {
+          body: { email }
+        },
+        res,
+        next
+      ) {
         userController
-          .createUser(email, db, errorHandler)
+          .createUser(email, db)
           .pipe(take(1))
           .subscribe(
-            function success({ status, body }) {
-              res.status(status).json(body);
+            function success(value) {
+              res.status(value.statusCode).json(value);
             },
             function failure(error) {
               next(error);
