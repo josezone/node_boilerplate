@@ -17,7 +17,6 @@
     },
     "opts": {
         "encoding": "utf8",
-        "readme": "./readme.md",
         "destination": "docs/",
         "recurse": true,
         "verbose": true,

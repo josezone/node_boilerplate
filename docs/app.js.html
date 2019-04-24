@@ -1,0 +1,173 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: app.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Global</h3><ul><li><a href="global.html#asyncLoader">asyncLoader</a></li><li><a href="global.html#originCheck">originCheck</a></li><li><a href="global.html#server">server</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>app.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import routerLoader from "./router/router";
+import config from "./config/config";
+import swaggerDoc from "./config/swaggerDoc";
+
+const expressLoader = "express";
+const helmetLoader = "helmet";
+const corsLoader = "cors";
+const bodyParserLoader = "body-parser";
+
+const whiteListLoader = "./const/cors";
+const onHeadersLoader = "./middlewares/timerHandler";
+const loggerBuilderLoader = "./builders/logger.builder";
+
+/**
+ * @param {array} whitelist list of allowed origins
+ */
+function originCheck(whitelist) {
+  return function originCb(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  };
+}
+
+/**
+ * Controller file for node
+ * @param {catchEm} catchEm method to handle async await error
+ * @param {function} errorHandler custom error formatter method
+ */
+// eslint-disable-next-line consistent-return
+async function server(db) {
+  const result = await Promise.all([
+    import(expressLoader),
+    import(helmetLoader),
+    import(corsLoader),
+    import(bodyParserLoader),
+    import(whiteListLoader),
+    routerLoader,
+    import(onHeadersLoader),
+    import(loggerBuilderLoader)
+  ]);
+  const [
+    { default: express },
+    { default: helmet },
+    { default: cors },
+    { default: bodyParser },
+    { default: WHITE_LIST },
+    router,
+    { default: onHeaders },
+    { default: LoggerBuilder }
+  ] = result;
+  const app = express();
+  app.use(onHeaders);
+  app.use(helmet());
+  // app.use(cors());
+  app.use(cors({ origin: originCheck(WHITE_LIST()) }));
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
+  if (config.LIFE_CYCLE === "stage" || config.LIFE_CYCLE === "dev") {
+    swaggerDoc(app);
+  }
+  app.use("/v1", router(db));
+  // eslint-disable-next-line no-unused-vars
+  app.use((err, req, res, _next) => {
+    new LoggerBuilder(req)
+      .createExecutedAt()
+      .setReqIp()
+      .setMethod()
+      .setOriginalUrl()
+      .setUserCountry()
+      .setStatusCode(err.statusCode)
+      .setError(err.error)
+      .setMessage(err.message)
+      .execute();
+    res.status(err.statusCode || 500).json(err);
+  });
+  return app;
+}
+
+export default server;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 24 2019 12:51:06 GMT+0530 (India Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
