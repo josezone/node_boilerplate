@@ -10,6 +10,12 @@ class UserQuery {
       defaults: { status: "Register", registrationToken }
     });
   }
+
+  getUserByEmail(email) {
+    return this.db.user.findOne({
+      where: { email }
+    });
+  }
 }
 
 export default new UserQuery();

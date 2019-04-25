@@ -1,3 +1,4 @@
+import uuidv4 from "uuid/v4";
 import userQueries from "../queries/user.queries";
 import catchEm from "../utility/asyncLoader";
 import successBuilderLoader from "../builders/success.builder";
@@ -15,7 +16,7 @@ export default new Promise(async function users(asyncExport) {
     static createUserCb(email, db) {
       return async function observerCb(observer) {
         const [err, result] = await catchEm(
-          userQueries.init(db).createRegistration(email, "jjjjj")
+          userQueries.init(db).createRegistration(email, uuidv4())
         );
         if (err) {
           failureBuilder

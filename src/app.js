@@ -1,6 +1,7 @@
 import routerLoader from "./router/router";
 import config from "./config/config";
 import swaggerDoc from "./config/swaggerDoc";
+import jwtStrategyLoader from "./config/jwtStrategy";
 
 const expressLoader = "express";
 const helmetLoader = "helmet";
@@ -26,8 +27,7 @@ function originCheck(whitelist) {
 
 /**
  * Controller file for node
- * @param {catchEm} catchEm method to handle async await error
- * @param {function} errorHandler custom error formatter method
+ * @param {db} db ORM via dependency injection
  */
 // eslint-disable-next-line consistent-return
 async function server(db) {
@@ -39,7 +39,8 @@ async function server(db) {
     import(whiteListLoader),
     routerLoader,
     import(onHeadersLoader),
-    import(loggerBuilderLoader)
+    import(loggerBuilderLoader),
+    jwtStrategyLoader
   ]);
   const [
     { default: express },
@@ -49,7 +50,8 @@ async function server(db) {
     { default: WHITE_LIST },
     router,
     { default: onHeaders },
-    { default: LoggerBuilder }
+    { default: LoggerBuilder },
+    jwtStrategy
   ] = result;
   const app = express();
   app.use(onHeaders);
@@ -58,6 +60,7 @@ async function server(db) {
   app.use(cors({ origin: originCheck(WHITE_LIST()) }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
+  jwtStrategy(app);
   if (config.LIFE_CYCLE === "stage" || config.LIFE_CYCLE === "dev") {
     swaggerDoc(app);
   }

@@ -48,15 +48,6 @@ describe("Api tests", () => {
       .set("accept", "json")
       .expect(200);
   });
-  test("It should response the GET method apis", async () => {
-    const result = await Db.init();
-    const db = result.connection();
-    const server = await app(db);
-    return request(server)
-      .get("/v1/apis/user")
-      .set("Origin", data)
-      .expect(200);
-  });
   test("It should response the PATCH method apis with 404", async () => {
     const result = await Db.init();
     const db = result.connection();
@@ -64,6 +55,6 @@ describe("Api tests", () => {
     return request(server)
       .patch("/v1/apis/user")
       .set("Origin", data)
-      .expect(404);
+      .expect(401);
   });
 });
