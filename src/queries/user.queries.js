@@ -4,15 +4,15 @@ class UserQuery {
     return this;
   }
 
-  createRegistration(email, registrationToken) {
-    return this.db.user.findOrCreate({
+  createRegistration(email, registrationToken, status) {
+    return this.db.credentials.findOrCreate({
       where: { email },
-      defaults: { status: "Register", registrationToken }
+      defaults: { status, registrationToken }
     });
   }
 
   getUserByEmail(email) {
-    return this.db.user.findOne({
+    return this.db.credentials.findOne({
       where: { email }
     });
   }

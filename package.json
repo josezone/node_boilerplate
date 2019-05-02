@@ -39,6 +39,7 @@
     "babel-eslint": "^10.0.1",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "better-docs": "^1.1.6",
+    "elasticsearch-mock-js": "^1.0.6",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",

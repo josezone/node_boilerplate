@@ -16,7 +16,7 @@ export default new Promise(async function users(asyncExport) {
     static createUserCb(email, db) {
       return async function observerCb(observer) {
         const [err, result] = await catchEm(
-          userQueries.init(db).createRegistration(email, uuidv4())
+          userQueries.init(db).createRegistration(email, uuidv4(), "Register")
         );
         if (err) {
           failureBuilder

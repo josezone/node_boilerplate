@@ -1,7 +1,5 @@
 const sequelizeLoader = "sequelize-mock";
-const userModelLoader = "./model/user.model";
-const adminModelLoader = "./model/admin.model";
-const clientModelLoader = "./model/client.model";
+const credentialModelLoader = "./model/credential.model";
 
 class Db {
   #connectionStatus;
@@ -15,26 +13,17 @@ class Db {
   async init() {
     let result = await Promise.all([
       import(sequelizeLoader),
-      import(userModelLoader),
-      import(adminModelLoader),
-      import(clientModelLoader)
+      import(credentialModelLoader)
     ]);
 
-    const [
-      { default: Sequelize },
-      { default: userModel },
-      { default: adminModel },
-      { default: clientModel }
-    ] = result;
+    const [{ default: Sequelize }, { default: credentialModel }] = result;
     this.#Sequelize = Sequelize;
     this.#sequelize = new this.#Sequelize();
     result = await this.#sequelize.authenticate();
 
     this.#connectionStatus = true;
     this.#models = {
-      user: userModel(this.#sequelize),
-      admin: adminModel(this.#sequelize),
-      client: clientModel(this.#sequelize)
+      credentials: credentialModel(this.#sequelize)
     };
     return this;
   }

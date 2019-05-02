@@ -1,9 +1,13 @@
 import config from "./config";
 
 const sequelizeLoader = "sequelize";
-const userModelLoader = "../model/user.model";
-const adminModelLoader = "../model/admin.model";
-const clientModelLoader = "../model/client.model";
+const credentialModelLoader = "../model/credential.model";
+const individualRightsModelLoader = "../model/individualRights.model";
+const individualRightsGroupModelLoader = "../model/individualRightsGroup.model";
+const oldPasswordsModelLoader = "../model/oldPasswords.model";
+const peopleModelLoader = "../model/people.model";
+const peopleRightsModelLoader = "../model/peopleRights.model";
+const rightsGroupModelLoader = "../model/rightsGroup.model";
 
 class Db {
   #connectionStatus;
@@ -17,16 +21,24 @@ class Db {
   async init() {
     let result = await Promise.all([
       import(sequelizeLoader),
-      import(userModelLoader),
-      import(adminModelLoader),
-      import(clientModelLoader)
+      import(credentialModelLoader),
+      import(individualRightsModelLoader),
+      import(individualRightsGroupModelLoader),
+      import(oldPasswordsModelLoader),
+      import(peopleModelLoader),
+      import(peopleRightsModelLoader),
+      import(rightsGroupModelLoader)
     ]);
 
     const [
       { default: Sequelize },
-      { default: userModel },
-      { default: adminModel },
-      { default: clientModel }
+      { default: credentialModel },
+      { default: individualRightsModel },
+      { default: individualRightsGroupModel },
+      { default: oldPasswordsModel },
+      { default: peopleModel },
+      { default: peopleRightsModel },
+      { default: rightsGroupModel }
     ] = result;
     this.#Sequelize = Sequelize;
     this.#sequelize = new this.#Sequelize(
@@ -49,15 +61,31 @@ class Db {
 
     this.#connectionStatus = true;
     this.#models = {
-      user: userModel(this.#Sequelize.Model).init(
+      credentials: credentialModel(this.#Sequelize.Model).init(
         this.#sequelize,
         this.#Sequelize
       ),
-      admin: adminModel(this.#Sequelize.Model).init(
+      individualRights: individualRightsModel(this.#Sequelize.Model).init(
         this.#sequelize,
         this.#Sequelize
       ),
-      client: clientModel(this.#Sequelize.Model).init(
+      individualRightsGroup: individualRightsGroupModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      ),
+      oldPasswords: oldPasswordsModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      ),
+      people: peopleModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      ),
+      peopleRights: peopleRightsModel(this.#Sequelize.Model).init(
+        this.#sequelize,
+        this.#Sequelize
+      ),
+      rightsGroup: rightsGroupModel(this.#Sequelize.Model).init(
         this.#sequelize,
         this.#Sequelize
       )
