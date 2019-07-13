@@ -1,4 +1,5 @@
 import { inject, injectable } from 'inversify';
+
 import { PermissionInterface } from './permission.i';
 import { RolesInterface } from './roles.i';
 import { TYPES } from './types';

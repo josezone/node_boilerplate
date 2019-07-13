@@ -1,7 +1,8 @@
+import { Router } from 'express';
+
+import { enableJWT } from '../middlewares/enableJWT';
 import { api } from './api';
 import { apis } from './apis';
-import { enableJWT } from '../middlewares/enableJWT';
-import { Router } from 'express';
 
 const router = Router();
 

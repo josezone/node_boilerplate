@@ -1,9 +1,7 @@
+import { Column, Entity } from 'typeorm';
+
 import { Base } from '../base.model';
 import { UserInterface } from '../user.model.i';
-import {
-  Column,
-  Entity,
-} from 'typeorm';
 
 @Entity()
 export class User extends Base implements UserInterface {

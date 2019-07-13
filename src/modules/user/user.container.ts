@@ -1,4 +1,5 @@
 import { Container } from 'inversify';
+
 import { Permission } from './permission';
 import { PermissionInterface } from './permission.i';
 import { Roles } from './roles';

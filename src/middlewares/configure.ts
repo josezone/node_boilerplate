@@ -1,9 +1,10 @@
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as cors from 'cors';
+import { Express } from 'express-serve-static-core';
 import * as helmet from 'helmet';
 import * as morgan from 'morgan';
-import { Express } from 'express-serve-static-core';
+
 import { stream } from '../config/logger';
 
 export function middleware(app: Express): void {

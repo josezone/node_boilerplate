@@ -1,9 +1,5 @@
-import {
-  createLogger,
-  Logger as Wlogger,
-  LoggerOptions,
-  transports,
-} from 'winston';
+import { createLogger, Logger as Wlogger, LoggerOptions, transports } from 'winston';
+
 import { FileTransportOptions, LoggerInterface } from './logger.i';
 
 class Logger implements LoggerInterface {

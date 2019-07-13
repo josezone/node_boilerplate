@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { Express } from 'express-serve-static-core';
+
 import { Strategies } from './config/jwtStrategy';
 import { middleware } from './middlewares/configure';
 import { routerFn } from './router';

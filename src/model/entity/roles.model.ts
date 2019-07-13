@@ -1,13 +1,9 @@
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+
 import { Base } from '../base.model';
-import { Permission } from './permission.model';
 import { RolesInterface } from '../roles.model.i';
+import { Permission } from './permission.model';
 import { User } from './user.model';
-import {
-    Column,
-    Entity,
-    ManyToMany,
-    JoinTable,
-} from 'typeorm';
 
 @Entity()
 export class Roles extends Base implements RolesInterface {

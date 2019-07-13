@@ -1,8 +1,9 @@
-import * as passport from 'passport';
-import { config } from './config';
 import { Express } from 'express-serve-static-core';
-import { JwtOptionsInterface, StrategyInterface } from './jwtStrategy.i';
+import * as passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+
+import { config } from './config';
+import { JwtOptionsInterface, StrategyInterface } from './jwtStrategy.i';
 
 class Strategy implements StrategyInterface {
   private jwtOptions: JwtOptionsInterface = {
