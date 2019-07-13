@@ -1,0 +1,5 @@
+{
+    "watch": ["src"],
+    "ext": "ts",
+    "exec": "ts-node ./src/index.ts -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
+}
