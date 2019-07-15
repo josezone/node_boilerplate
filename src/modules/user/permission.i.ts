@@ -4,7 +4,6 @@ import { Permission } from './permission';
 export interface PermissionInterface {
     readonly model: PermissionModel;
     name: string;
-    init(): void;
     save(): any;
     findOne(): any;
     find(): any;

@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
-import { ObjectLiteral } from 'typeorm';
+import { ObjectLiteral, getRepository } from 'typeorm';
 
-import { db } from '../../config/db';
 import { Permission as PermissionModel } from '../../model/entity/permission.model';
 import {
     FindOneQuerryInterface, FindOrderInterface, OrderInterface, PaginationInterface,
@@ -20,10 +19,9 @@ export class Permission implements PermissionInterface {
 	private orderFind!: FindOrderInterface;
 	private paginationFind!: PaginationInterface;
 
-	init(){
-		const connect = db.connect;
+	constructor(){
 		this.permissionData = new PermissionModel();
-		this.permissionRepository =  connect.getRepository(this.permissionData);
+		this.permissionRepository =  getRepository(PermissionModel);
 	}
 
 	set name(name: string) {
