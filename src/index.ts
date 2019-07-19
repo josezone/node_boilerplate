@@ -1,4 +1,6 @@
-import { Express } from 'express-serve-static-core';
+import 'reflect-metadata';
+
+import { Application } from 'express';
 
 import { Server } from './app';
 import { config } from './config/config';
@@ -10,7 +12,7 @@ async function startServer() {
     if(!connect){
         return;
     }
-    const app: Express = Server.server();
+    const app: Application = await Server.server();
     app.listen(config.PORT, () => Consoler.log(`Listening on port ${config.PORT}!`));
 }
 

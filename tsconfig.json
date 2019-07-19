@@ -4,7 +4,8 @@
     "rootDir": ".",
     "outDir": "build",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*.ts",

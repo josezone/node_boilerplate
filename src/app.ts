@@ -1,17 +1,15 @@
-import * as express from 'express';
-import { Express } from 'express-serve-static-core';
-
-import { Strategies } from './config/jwtStrategy';
-import { middleware } from './middlewares/configure';
-import { routerFn } from './router';
+import { Application } from 'express';
+import { Container } from 'inversify';
+import { InversifyExpressServer } from 'inversify-express-utils';
+import {buildProviderModule} from 'inversify-binding-decorators';
+import "./config/ioc";
 
 export class Server {
-  static server(): Express {
-    const app = express();
-    middleware(app);
-    const passportStrategy = new Strategies(app);
-    passportStrategy.jwtStrategy();
-    app.use('/v1', routerFn());
-    return app;
+  static async server(): Promise<Application> {
+    const container = new Container();
+    container.load(buildProviderModule());
+    const app = new InversifyExpressServer(container, null, { rootPath: "/api/v1" });
+    const server = app.build();
+    return server;
   }
 }
