@@ -1,8 +1,11 @@
+import { provide } from 'inversify-binding-decorators';
 import { createLogger, Logger as Wlogger, LoggerOptions, transports } from 'winston';
 
-import { FileTransportOptions, LoggerInterface } from './logger.i';
+import { LOGGER } from '../const/types';
+import { FileTransportOptions, LoggerInterface } from './logger.interface';
 
-class Logger implements LoggerInterface {
+@provide(LOGGER)
+export class Logger implements LoggerInterface {
   private fileOptions: FileTransportOptions = {
     maxsize: 5242880, // 5MB
     maxFiles: 5,
@@ -26,7 +29,7 @@ class Logger implements LoggerInterface {
 
   private logger: Wlogger | undefined;
 
-  init() {
+  constructor() {
     this.logger = createLogger({
       transports: [
         new transports.File(this.infoOptions),
@@ -43,8 +46,3 @@ class Logger implements LoggerInterface {
     },
   };
 }
-
-const logger = new Logger();
-logger.init();
-
-export const stream = logger.log;

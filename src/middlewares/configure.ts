@@ -1,17 +1,28 @@
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as cors from 'cors';
-import { Express } from 'express-serve-static-core';
 import * as helmet from 'helmet';
+import { inject } from 'inversify';
+import { provide } from 'inversify-binding-decorators';
+import { InversifyExpressServer } from 'inversify-express-utils';
 import * as morgan from 'morgan';
 
-import { stream } from '../config/logger';
+import { LoggerInterface } from '../config/logger.interface';
+import { LOGGER, MIDDLEWARES } from '../const/types';
+import { ConfigureMiddlewaresInterface } from './configure.interface';
 
-export function middleware(app: Express): void {
-  app.use(helmet());
-  app.use(compression());
-  app.use(cors());
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-  app.use(morgan('combined', { stream }));
+@provide(MIDDLEWARES)
+export class ConfigureMiddlewares implements ConfigureMiddlewaresInterface {
+  @inject(LOGGER) logger!: LoggerInterface;
+
+  middleware(server: InversifyExpressServer): void {
+    server.setConfig(app => {
+      app.use(helmet());
+      app.use(compression());
+      app.use(cors());
+      app.use(bodyParser.urlencoded({ extended: false }));
+      app.use(bodyParser.json());
+      app.use(morgan('combined', { stream: this.logger.log }));
+    });
+  }
 }

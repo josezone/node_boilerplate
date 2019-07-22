@@ -1,0 +1,9 @@
+export const ASYNC_LOADER = 'asyncLoader';
+export const CONSOLER = 'consoler';
+export const CUSTOM_ERROR = 'customError';
+export const DEEP_CLONE = 'deepClone';
+export const ERROR_HANDLER = 'errorHandler';
+export const DB = 'db';
+export const MIDDLEWARES = 'middlewares';
+export const LOGGER = 'logger';
+export const ENABLE_JWT = 'enableJWT';

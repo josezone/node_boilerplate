@@ -8,5 +8,4 @@ export interface FileTransportOptions extends winston.LoggerOptions {
 
 export interface LoggerInterface {
   log: { write: (message: string) => void };
-  init(): void;
 }

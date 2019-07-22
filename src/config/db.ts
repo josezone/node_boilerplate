@@ -1,12 +1,20 @@
 import { createConnection, ConnectionOptions } from 'typeorm';
 
-import { AsyncLoader } from '../utility/asyncLoader';
-import { Consoler } from '../utility/consoler';
-import { ErrorHandler } from '../utility/errorHandler';
-import { DbInterface } from './db.i';
+import { DbInterface } from './db.interface';
 import { config } from './config';
+import { inject } from 'inversify';
+import { ASYNC_LOADER, ERROR_HANDLER, CONSOLER, DB } from '../const/types';
+import { AsyncLoaderInterface } from '../utility/asyncLoader.interface';
+import { ErrorHandlerInterface } from '../utility/errorHandler.interface';
+import { ConsolerInterface } from '../utility/consoler.interface';
+import { provide } from 'inversify-binding-decorators';
 
-class Db implements DbInterface {
+@provide(DB)
+export class Db implements DbInterface {
+	@inject(ASYNC_LOADER) asyncLoader!: AsyncLoaderInterface;
+	@inject(ERROR_HANDLER) errorHandler!: ErrorHandlerInterface;
+	@inject(CONSOLER) consoler!: ConsolerInterface;
+
 	settings: ConnectionOptions = {
 		type: config.TYPEORM_CONNECTION,
 		host: config.TYPEORM_HOST,
@@ -26,19 +34,11 @@ class Db implements DbInterface {
 		},
 	};
 
-	private db: any;
 	async connection() {
-		const [ error, connection ] = await AsyncLoader.load(createConnection(this.settings));
+		// tslint:disable-next-line: no-any
+		const [ error ]:any[] = await this.asyncLoader.load(createConnection(this.settings));
 		if (error) {
-			Consoler.log(ErrorHandler.clean(error));
-			return;
+			this.consoler.log(this.errorHandler.clean(error));
 		}
-		this.db = connection;
-		return connection;
-	}
-	get connect() {
-		return this.db;
 	}
 }
-
-export const db = new Db();

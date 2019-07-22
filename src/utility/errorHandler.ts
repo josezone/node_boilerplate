@@ -1,5 +1,11 @@
-export class ErrorHandler {
-  static clean(error: Error): string {
+import { provide } from 'inversify-binding-decorators';
+
+import { ERROR_HANDLER } from '../const/types';
+import { ErrorHandlerInterface } from './errorHandler.interface';
+
+@provide(ERROR_HANDLER)
+export class ErrorHandler implements ErrorHandlerInterface {
+  clean(error: Error): string {
     const msg = error.message;
     const err = msg.replace(/^Error: /, '');
     const stack = error

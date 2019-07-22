@@ -1,8 +1,13 @@
-import { config } from '../config/config';
+import { provide } from 'inversify-binding-decorators';
 
-export class Consoler {
+import { config } from '../config/config';
+import { CONSOLER } from '../const/types';
+import { ConsolerInterface } from './consoler.interface';
+
+@provide(CONSOLER)
+export class Consoler implements ConsolerInterface {
   // tslint:disable-next-line: no-any
-  static log(value: any): void {
+  log(value: any): void {
     if (config.NODE_ENV !== 'production') {
       console.log(value);
     }

@@ -1,3 +1,8 @@
+import { provide } from 'inversify-binding-decorators';
+
+import { ASYNC_LOADER } from '../const/types';
+import { AsyncLoaderInterface } from './asyncLoader.interface';
+
 /**
  * @typedef {catchEm} catchEm
  */
@@ -15,9 +20,10 @@
  *  id1 --> error[error];
  */
 
-export class AsyncLoader {
+@provide(ASYNC_LOADER)
+export class AsyncLoader implements AsyncLoaderInterface {
   // tslint:disable-next-line: no-any
-  static load(promise: Promise<any>): Promise<any[]> {
+  load(promise: Promise<any>): Promise<any[]> {
     return promise.then(data => [null, data]).catch(err => [err]);
   }
 }
