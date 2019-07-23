@@ -5,6 +5,7 @@
     "outDir": "build",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "moduleResolution": "node"
   },
   "include": [

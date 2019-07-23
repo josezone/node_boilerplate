@@ -33,6 +33,7 @@ class UserService implements UserServiceInterface {
       select: ['password', 'id'],
       where: { email },
     });
+    console.log('user')
     console.log(user)
   }
 
