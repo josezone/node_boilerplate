@@ -10,10 +10,10 @@ import { ConsolerInterface } from '../utility/consoler.interface';
 import { provide } from 'inversify-binding-decorators';
 
 @provide(DB)
-export class Db implements DbInterface {
-	@inject(ASYNC_LOADER) asyncLoader!: AsyncLoaderInterface;
-	@inject(ERROR_HANDLER) errorHandler!: ErrorHandlerInterface;
-	@inject(CONSOLER) consoler!: ConsolerInterface;
+class Db implements DbInterface {
+	@inject(ASYNC_LOADER) private asyncLoader!: AsyncLoaderInterface;
+	@inject(ERROR_HANDLER) private errorHandler!: ErrorHandlerInterface;
+	@inject(CONSOLER) private consoler!: ConsolerInterface;
 
 	settings: ConnectionOptions = {
 		type: config.TYPEORM_CONNECTION,

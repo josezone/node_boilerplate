@@ -5,7 +5,7 @@ import { LOGGER } from '../const/types';
 import { FileTransportOptions, LoggerInterface } from './logger.interface';
 
 @provide(LOGGER)
-export class Logger implements LoggerInterface {
+class Logger implements LoggerInterface {
   private fileOptions: FileTransportOptions = {
     maxsize: 5242880, // 5MB
     maxFiles: 5,

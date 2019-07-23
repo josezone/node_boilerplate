@@ -12,8 +12,8 @@ import { LOGGER, MIDDLEWARES } from '../const/types';
 import { ConfigureMiddlewaresInterface } from './configure.interface';
 
 @provide(MIDDLEWARES)
-export class ConfigureMiddlewares implements ConfigureMiddlewaresInterface {
-  @inject(LOGGER) logger!: LoggerInterface;
+class ConfigureMiddlewares implements ConfigureMiddlewaresInterface {
+  @inject(LOGGER) private logger!: LoggerInterface;
 
   middleware(server: InversifyExpressServer): void {
     server.setConfig(app => {

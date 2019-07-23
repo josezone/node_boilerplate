@@ -5,7 +5,7 @@ import { ENABLE_JWT } from '../const/types';
 import { EnableJWTInterface } from './enableJWT.interface';
 
 @provide(ENABLE_JWT)
-export class EnableJWT implements EnableJWTInterface {
+class EnableJWT implements EnableJWTInterface {
   enableJWT(): Authenticator {
     return authenticate('jwt', { session: false });
   }

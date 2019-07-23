@@ -4,7 +4,7 @@ import { ERROR_HANDLER } from '../const/types';
 import { ErrorHandlerInterface } from './errorHandler.interface';
 
 @provide(ERROR_HANDLER)
-export class ErrorHandler implements ErrorHandlerInterface {
+class ErrorHandler implements ErrorHandlerInterface {
   clean(error: Error): string {
     const msg = error.message;
     const err = msg.replace(/^Error: /, '');

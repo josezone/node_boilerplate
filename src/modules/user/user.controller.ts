@@ -1,10 +1,20 @@
-import { controller, httpGet } from "inversify-express-utils";
-import {Request, Response, NextFunction} from "express";
+import { NextFunction, Response } from 'express';
+import { inject } from 'inversify';
+import { BaseHttpController, controller, httpPost, requestParam } from 'inversify-express-utils';
 
-@controller("/user")
-export class UserController {
-    @httpGet("/")
-    private index(req: Request, res: Response, next: NextFunction): string {
-        return "server is up";
-    }
+import { REGISTER_VALIDATOR, USER_SERVICE } from '../../const/types';
+import { UserServiceInterface } from './services/user.interface';
+
+@controller('/user')
+class UserController extends BaseHttpController {
+  @inject(USER_SERVICE) private userService!: UserServiceInterface;
+
+  @httpPost('/register', REGISTER_VALIDATOR)
+  private register(
+    @requestParam('email') email: string,
+    res: Response,
+    next: NextFunction
+  ): string {
+    return this.userService.register(email);
+  }
 }

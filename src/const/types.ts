@@ -7,3 +7,6 @@ export const DB = 'db';
 export const MIDDLEWARES = 'middlewares';
 export const LOGGER = 'logger';
 export const ENABLE_JWT = 'enableJWT';
+export const USER_SERVICE = 'userService';
+export const REGISTER_VALIDATOR = 'registerValidator';
+export const VALIDATOR_ERROR = 'validatorError';

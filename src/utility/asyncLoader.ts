@@ -21,7 +21,7 @@ import { AsyncLoaderInterface } from './asyncLoader.interface';
  */
 
 @provide(ASYNC_LOADER)
-export class AsyncLoader implements AsyncLoaderInterface {
+class AsyncLoader implements AsyncLoaderInterface {
   // tslint:disable-next-line: no-any
   load(promise: Promise<any>): Promise<any[]> {
     return promise.then(data => [null, data]).catch(err => [err]);

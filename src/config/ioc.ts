@@ -4,8 +4,10 @@ import '../utility/consoler';
 import '../utility/customError';
 import '../utility/deepClone';
 import '../utility/errorHandler';
+import '../utility/handleValidatorError';
 import './db';
 import '../middlewares/configure';
 import './logger';
 import '../middlewares/enableJWT.interface';
-
+import '../modules/user/services/user';
+import '../modules/user/validators/register';

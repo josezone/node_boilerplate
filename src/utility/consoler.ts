@@ -5,7 +5,7 @@ import { CONSOLER } from '../const/types';
 import { ConsolerInterface } from './consoler.interface';
 
 @provide(CONSOLER)
-export class Consoler implements ConsolerInterface {
+class Consoler implements ConsolerInterface {
   // tslint:disable-next-line: no-any
   log(value: any): void {
     if (config.NODE_ENV !== 'production') {
