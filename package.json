@@ -20,7 +20,8 @@
       "pretest": "npm run compile",
       "posttest": "npm run check",
       "autoMigrate": "ts-node ./node_modules/.bin/typeorm migration:generate  -n PostRefactoring",
-      "start": "ts-node src/index.ts"
+      "start": "ts-node src/index.ts",
+      "doc": "typedoc --theme ./node_modules/typedoc-twilio-theme/bin --out docs"
    },
    "devDependencies": {
       "@types/bcrypt": "^3.0.0",
@@ -43,6 +44,10 @@
       "inversify-dts": "^3.0.0",
       "nodemon": "^1.19.1",
       "ts-node": "^8.3.0",
+      "typedoc": "^0.14.2",
+      "typedoc-plantuml": "^1.4.1",
+      "typedoc-plugin-mermaid": "^1.1.0",
+      "typedoc-twilio-theme": "^1.0.0",
       "typescript": "3.5.3"
    },
    "dependencies": {
