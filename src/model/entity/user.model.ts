@@ -12,6 +12,9 @@ export class User extends Base implements UserInterface {
   password!: string;
 
   @Column()
+  token!: string;
+
+  @Column()
   status!: boolean;
 
   @Column()

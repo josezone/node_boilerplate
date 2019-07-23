@@ -11,34 +11,36 @@ import { provide } from 'inversify-binding-decorators';
 
 @provide(DB)
 class Db implements DbInterface {
-	@inject(ASYNC_LOADER) private asyncLoader!: AsyncLoaderInterface;
-	@inject(ERROR_HANDLER) private errorHandler!: ErrorHandlerInterface;
-	@inject(CONSOLER) private consoler!: ConsolerInterface;
+  @inject(ASYNC_LOADER) private asyncLoader!: AsyncLoaderInterface;
+  @inject(ERROR_HANDLER) private errorHandler!: ErrorHandlerInterface;
+  @inject(CONSOLER) private consoler!: ConsolerInterface;
 
-	settings: ConnectionOptions = {
-		type: config.TYPEORM_CONNECTION,
-		host: config.TYPEORM_HOST,
-		port: config.TYPEORM_PORT,
-		username: config.TYPEORM_USERNAME,
-		password: config.TYPEORM_PASSWORD,
-		database: config.TYPEORM_DATABASE,
-		logging: true,
-		synchronize: true,
-		entities: [ process.cwd() + '/src/model/entity/*.ts' ],
-		subscribers: [ process.cwd() + '/src/modules/user/*.ts' ],
-		migrations: [ process.cwd() + '/src/migration/*.ts' ],
-		cli: {
-			entitiesDir: process.cwd() + '/src/model/entity',
-			subscribersDir: process.cwd() + '/src/modules/user',
-			migrationsDir: process.cwd() + '/src/migration',
-		},
-	};
+  settings: ConnectionOptions = {
+    type: config.TYPEORM_CONNECTION,
+    host: config.TYPEORM_HOST,
+    port: config.TYPEORM_PORT,
+    username: config.TYPEORM_USERNAME,
+    password: config.TYPEORM_PASSWORD,
+    database: config.TYPEORM_DATABASE,
+    logging: true,
+    synchronize: true,
+    entities: [__dirname + '/../model/entity/*.ts'],
+    subscribers: [__dirname + '/../modules/user/*.ts'],
+    migrations: [__dirname + '/../migration/*.ts'],
+    cli: {
+      entitiesDir: __dirname + '/../model/entity',
+      subscribersDir: __dirname + '/../modules/user',
+      migrationsDir: __dirname + '/../migration',
+    },
+  };
 
-	async connection() {
-		// tslint:disable-next-line: no-any
-		const [ error ]:any[] = await this.asyncLoader.load(createConnection(this.settings));
-		if (error) {
-			this.consoler.log(this.errorHandler.clean(error));
-		}
-	}
+  async connection() {
+    // tslint:disable-next-line: no-any
+    const [error, connection]: any[] = await this.asyncLoader.load(
+      createConnection(this.settings)
+	);
+    if (error) {
+      this.consoler.log(this.errorHandler.clean(error));
+    }
+  }
 }

@@ -6,16 +6,21 @@ import { BaseMiddleware } from 'inversify-express-utils';
 import * as Joi from '@hapi/joi';
 
 import { VALIDATION_REGISTER } from '../../../const/error';
-import { REGISTER_VALIDATOR, VALIDATOR_ERROR } from '../../../const/types';
+import { LOGIN_VALIDATOR, VALIDATOR_ERROR } from '../../../const/types';
 import { ValidatorErrorInterface } from '../../../utility/handleValidatorError.interface';
 
-@provide(REGISTER_VALIDATOR)
-class RegisterValidator extends BaseMiddleware {
+@provide(LOGIN_VALIDATOR)
+class LoginValidator extends BaseMiddleware {
   @inject(VALIDATOR_ERROR) private validatorError!: ValidatorErrorInterface;
 
-  private schema = Joi.object().keys({
-    email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  }).options({ abortEarly: false });
+  private schema = Joi.object()
+    .keys({
+      email: Joi.string()
+        .email({ minDomainSegments: 2 })
+        .required(),
+      password: Joi.string().required(),
+    })
+    .options({ abortEarly: false });
 
   handler(req: Request, res: Response, next: NextFunction) {
     const result: Joi.ValidationResult<{}> = Joi.validate(

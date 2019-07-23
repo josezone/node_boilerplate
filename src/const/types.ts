@@ -10,3 +10,5 @@ export const ENABLE_JWT = 'enableJWT';
 export const USER_SERVICE = 'userService';
 export const REGISTER_VALIDATOR = 'registerValidator';
 export const VALIDATOR_ERROR = 'validatorError';
+export const PASSWORD = 'password';
+export const LOGIN_VALIDATOR = 'loginValidator';
