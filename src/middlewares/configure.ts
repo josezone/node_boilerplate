@@ -34,7 +34,7 @@ class ConfigureMiddlewares implements ConfigureMiddlewaresInterface {
 
   private options = {
     swaggerDefinition: this.swaggerDefinition,
-    apis: ['../modules/**/docs/*.yaml'],
+    apis: ['./src/modules/**/docs/*.yaml'],
   };
 
   middleware(server: InversifyExpressServer): void {
