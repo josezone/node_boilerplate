@@ -2,11 +2,11 @@ import 'reflect-metadata';
 
 import { Container } from 'inversify';
 
-import { ContainerData } from '../../src/container';
+import { receptacle } from '../../src/container';
 import { ASYNC_LOADER } from '../../src/const/types';
 import { AsyncLoaderInterface } from '../../src/utility/asyncLoader.interface';
 
-const container: Container = ContainerData.inverifyContainer();
+const container: Container = receptacle.getContainer;
 const asyncLoader: AsyncLoaderInterface = container.get(ASYNC_LOADER);
 
 const dataSet1 = new Promise((resolve, reject) => {

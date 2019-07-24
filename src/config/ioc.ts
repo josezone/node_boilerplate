@@ -13,3 +13,4 @@ import '../middlewares/enableJWT.interface';
 import '../modules/user/services/user';
 import '../modules/user/validators/register';
 import '../modules/user/validators/login';
+import '../server/app';

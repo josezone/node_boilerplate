@@ -12,3 +12,4 @@ export const REGISTER_VALIDATOR = 'registerValidator';
 export const VALIDATOR_ERROR = 'validatorError';
 export const PASSWORD = 'password';
 export const LOGIN_VALIDATOR = 'loginValidator';
+export const SERVER = 'server';

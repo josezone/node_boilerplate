@@ -19,7 +19,7 @@ interface ConfigInterface {
   TYPEORM_DATABASE: string;
   TYPEORM_PORT: number;
   TYPEORM_SYNCHRONIZE: boolean;
-  TYPEORM_CONNECTION: 'mysql';
+  TYPEORM_CONNECTION: 'postgres';
 }
 
 export const config: ConfigInterface = {
@@ -40,5 +40,5 @@ export const config: ConfigInterface = {
     ? Number(process.env.TYPEORM_PORT)
     : 3306,
   TYPEORM_SYNCHRONIZE: process.env.TYPEORM_SYNCHRONIZE ? true : false,
-  TYPEORM_CONNECTION: 'mysql',
+  TYPEORM_CONNECTION: 'postgres',
 };

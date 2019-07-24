@@ -6,14 +6,21 @@ import { makeLoggerMiddleware } from 'inversify-logger-middleware';
 
 import { config } from './config/config';
 
-export class ContainerData {
-  static inverifyContainer(): Container {
-    const container: Container = new Container();
-    container.load(buildProviderModule());
+class ContainerData {
+  container: Container;
+
+  constructor() {
+    this.container = new Container();
+    this.container.load(buildProviderModule());
     if (config.NODE_ENV === 'development') {
       const logger = makeLoggerMiddleware();
-      container.applyMiddleware(logger);
+      this.container.applyMiddleware(logger);
     }
-    return container;
+  }
+
+  get getContainer() {
+    return this.container;
   }
 }
+
+export const receptacle = new ContainerData();
