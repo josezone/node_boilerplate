@@ -24,9 +24,9 @@ class Db implements DbInterface {
     database: config.TYPEORM_DATABASE,
     logging: true,
     synchronize: true,
-    entities: [__dirname + '/../model/entity/*.ts'],
-    subscribers: [__dirname + '/../modules/user/*.ts'],
-    migrations: [__dirname + '/../migration/*.ts'],
+    entities: [__dirname + '/../model/entity/*.*'],
+    subscribers: [__dirname + '/../modules/user/*.*'],
+    migrations: [__dirname + '/../migration/*.*'],
     cli: {
       entitiesDir: __dirname + '/../model/entity',
       subscribersDir: __dirname + '/../modules/user',
