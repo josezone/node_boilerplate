@@ -23,7 +23,7 @@ class ConfigureMiddlewares implements ConfigureMiddlewaresInterface {
   private swaggerDefinition = {
     info: {
       title: `REST API for App`,
-      version:1,
+      version: 1,
       description: `This is the REST API for App`,
     },
     host: `localhost:${config.PORT}`,

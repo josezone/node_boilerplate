@@ -1,3 +1,3 @@
 export interface DbInterface {
-    connection(): void;
+  connection(): void;
 }

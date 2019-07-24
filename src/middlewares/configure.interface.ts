@@ -1,5 +1,5 @@
-import { InversifyExpressServer } from "inversify-express-utils";
+import { InversifyExpressServer } from 'inversify-express-utils';
 
 export interface ConfigureMiddlewaresInterface {
-    middleware(app: InversifyExpressServer): void;
+  middleware(app: InversifyExpressServer): void;
 }

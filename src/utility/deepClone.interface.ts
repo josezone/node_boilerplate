@@ -1,3 +1,3 @@
 export interface DeepCloneInterface {
-    clone(cloneObject: {}): {};
+  clone(cloneObject: {}): {};
 }

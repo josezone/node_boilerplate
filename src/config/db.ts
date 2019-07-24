@@ -38,7 +38,7 @@ class Db implements DbInterface {
     // tslint:disable-next-line: no-any
     const [error, connection]: any[] = await this.asyncLoader.load(
       createConnection(this.settings)
-	);
+    );
     if (error) {
       this.consoler.log(this.errorHandler.clean(error));
     }

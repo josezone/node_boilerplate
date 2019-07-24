@@ -1,5 +1,10 @@
 import { provide } from 'inversify-binding-decorators';
-import { createLogger, Logger as Wlogger, LoggerOptions, transports } from 'winston';
+import {
+  createLogger,
+  Logger as Wlogger,
+  LoggerOptions,
+  transports,
+} from 'winston';
 
 import { LOGGER } from '../const/types';
 import { FileTransportOptions, LoggerInterface } from './logger.interface';

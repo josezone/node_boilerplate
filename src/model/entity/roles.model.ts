@@ -7,14 +7,14 @@ import { User } from './user.model';
 
 @Entity()
 export class Roles extends Base implements RolesInterface {
-    @Column()
-    name!: string;
+  @Column()
+  name!: string;
 
-    @ManyToMany(type => Permission)
-    @JoinTable()
-    permission!: Permission[];
+  @ManyToMany(type => Permission)
+  @JoinTable()
+  permission!: Permission[];
 
-    @ManyToMany(type => User)
-    @JoinTable()
-    user!: User[];
+  @ManyToMany(type => User)
+  @JoinTable()
+  user!: User[];
 }

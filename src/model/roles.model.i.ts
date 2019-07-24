@@ -1,5 +1,5 @@
 export interface RolesInterface {
-    name: string;
-    permission: {};
-    user: {};
+  name: string;
+  permission: {};
+  user: {};
 }

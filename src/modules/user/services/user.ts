@@ -12,6 +12,7 @@ import { UserServiceInterface } from './user.interface';
 @provide(USER_SERVICE)
 class UserService implements UserServiceInterface {
   @inject(PASSWORD) private passwordService!: PasswordInterface;
+  // tslint:disable-next-line: no-any
   private userRepository: Repository<any>;
   private rolesRepository: Repository<RolesInterface>;
   private permissionRepository: Repository<PermissionInterface>;
@@ -33,8 +34,6 @@ class UserService implements UserServiceInterface {
       select: ['password', 'id'],
       where: { email },
     });
-    console.log('user')
-    console.log(user)
   }
 
   forgotPassword(email: string) {}

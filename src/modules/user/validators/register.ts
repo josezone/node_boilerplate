@@ -13,9 +13,13 @@ import { ValidatorErrorInterface } from '../../../utility/handleValidatorError.i
 class RegisterValidator extends BaseMiddleware {
   @inject(VALIDATOR_ERROR) private validatorError!: ValidatorErrorInterface;
 
-  private schema = Joi.object().keys({
-    email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  }).options({ abortEarly: false });
+  private schema = Joi.object()
+    .keys({
+      email: Joi.string()
+        .email({ minDomainSegments: 2 })
+        .required(),
+    })
+    .options({ abortEarly: false });
 
   handler(req: Request, res: Response, next: NextFunction) {
     const result: Joi.ValidationResult<{}> = Joi.validate(

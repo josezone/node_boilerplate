@@ -1,5 +1,5 @@
-import { Authenticator } from "passport";
+import { Authenticator } from 'passport';
 
 export interface EnableJWTInterface {
-    enableJWT(): Authenticator;
+  enableJWT(): Authenticator;
 }

@@ -1,3 +1,4 @@
 export interface AsyncLoaderInterface {
-    load(promise: Promise<any>): Promise<any>;
+  // tslint:disable-next-line: no-any
+  load(promise: Promise<any>): Promise<any>;
 }

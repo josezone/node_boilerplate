@@ -1,3 +1,3 @@
 export interface ErrorHandlerInterface {
-    clean(error: Error): string;
+  clean(error: Error): string;
 }

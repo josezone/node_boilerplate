@@ -1,3 +1,4 @@
 export interface ConsolerInterface {
-    log(value: any): void;
+  // tslint:disable-next-line: no-any
+  log(value: any): void;
 }

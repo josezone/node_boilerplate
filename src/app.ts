@@ -11,7 +11,7 @@ import { ConfigureMiddlewaresInterface } from './middlewares/configure.interface
 
 export class Server {
   static async server(): Promise<Application> {
-    const container: Container =ContainerData.inverifyContainer();
+    const container: Container = ContainerData.inverifyContainer();
     const db: DbInterface = container.get(DB);
     await db.connection();
     const app: InversifyExpressServer = new InversifyExpressServer(
