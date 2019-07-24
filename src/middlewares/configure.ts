@@ -16,17 +16,15 @@ const swaggerJSDoc = require('swagger-jsdoc');
 
 import swaggerUiExpress = require('swagger-ui-express');
 
-const { version, name } = require('../../package.json');
-
 @provide(MIDDLEWARES)
 class ConfigureMiddlewares implements ConfigureMiddlewaresInterface {
   @inject(LOGGER) private logger!: LoggerInterface;
 
   private swaggerDefinition = {
     info: {
-      title: `REST API for ${name}`,
-      version,
-      description: `This is the REST API for ${name}`,
+      title: `REST API for App`,
+      version:1,
+      description: `This is the REST API for App`,
     },
     host: `localhost:${config.PORT}`,
     basePath: '/api/v1',

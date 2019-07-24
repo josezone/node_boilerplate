@@ -11,7 +11,7 @@
   "keywords": [],
   "scripts": {
     "test": "jest test",
-    "coverage": "jest --collectCoverageFrom=src/** --collectCoverageFrom=!src/app.js --coverage test",
+    "coverage": "jest --collectCoverageFrom=src/** --coverage test",
     "check": "gts check",
     "clean": "gts clean",
     "compile": "tsc -p .",
