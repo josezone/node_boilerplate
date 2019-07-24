@@ -1,0 +1,60 @@
+version: '2.3'
+
+services:
+
+  # node:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: auth
+  #   container_name: auth
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   command: ./node_modules/.bin/babel-node --inspect=0.0.0.0:9229 ./index.js
+  #   ports:
+  #     - "3000:3000"
+  #     - "9229:9229"
+  #     - "9230:9230"
+  #   volumes:
+  #     - .:/home/node/app
+  #     - ./package.json:/home/node/app/package.json
+  #     - ./package-lock.json:/home/node/app/package-lock.json
+  #     - notused:/home/node/app/node_modules
+  #   networks:
+  #     - app-network
+
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+      dockerfile: Dockerfile
+    image: elasticsearch
+    container_name: elasticsearch
+    restart: unless-stopped
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - data:/home/node/elasticsearch
+    networks:
+      - app-network  
+
+  db:
+    image: mysql
+    restart: unless-stopped
+    container_name: mysql
+    env_file: .env
+    ports:
+      - 33060:33060
+    volumes:
+      - dbdata:/home/node/sql
+    networks:
+      - app-network 
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  notused:
+  dbdata:
+  data:

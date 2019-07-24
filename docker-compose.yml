@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    image: api
+    container_name: api
+    restart: unless-stopped
+    env_file: api/.env
+    ports:
+      - "3001:3001"
+    depends_on: 
+      - db
+    volumes:
+      - ./api:/home/node/app
+    networks:
+      - app-network
+    command: sh -c 'yarn run-dev'
+  
+  client:
+    build: 
+      context: ./client
+      dockerfile: ./Dockerfile
+    image: react
+    container_name: react
+    restart: unless-stopped
+    depends_on: 
+      - api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/home/node/app
+    networks:
+      - app-network
+    command: sh -c 'yarn start'
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - app-network  
+  
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    image: nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx/build:/usr/share/nginx/html
+    ports:
+      - 80:80
+    command: ["nginx","-g","daemon off;"]
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  node_modules2: 
+  node_modules1: 
