@@ -21,7 +21,8 @@
     "posttest": "npm run check",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "start": "ts-node src/index.ts",
+    "prod": "forever ./build/src/index.js",
+    "start": "npm run clean && npm run compile && npm run prod",
     "test": "jest test"
   },
   "dependencies": {
@@ -32,7 +33,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "helmet": "^3.19.0",
+    "helmet": "^3.20.0",
     "inversify": "^5.0.1",
     "inversify-binding-decorators": "^4.0.0",
     "inversify-devtools": "^1.0.0",

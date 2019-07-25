@@ -1,73 +1,38 @@
-version: '3'
-
+version: "3"
 services:
-
-  api:
-    build: 
-      context: ./api
-      dockerfile: Dockerfile
-    image: api
-    container_name: api
+  app:
+    build: .
     restart: unless-stopped
-    env_file: api/.env
-    ports:
-      - "3001:3001"
-    depends_on: 
+    depends_on:
       - db
-    volumes:
-      - ./api:/home/node/app
-    networks:
-      - app-network
-    command: sh -c 'yarn run-dev'
-  
-  client:
-    build: 
-      context: ./client
-      dockerfile: ./Dockerfile
-    image: react
-    container_name: react
-    restart: unless-stopped
-    depends_on: 
-      - api
     ports:
       - "3000:3000"
+      - "9229:9229"
+    env_file: .env
     volumes:
-      - ./client:/home/node/app
+      - app:/home/node/app
     networks:
       - app-network
-    command: sh -c 'yarn start'
 
   db:
-    image: postgres
+    image: postgres:11.4-alpine
     restart: unless-stopped
     container_name: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - app-network
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: 'postgres'
-    volumes:
-      - dbdata:/var/lib/postgresql/data
-    networks:
-      - app-network  
-  
-  nginx:
-    container_name: nginx
-    build:
-      context: ./nginx
-      dockerfile: ./Dockerfile
-    image: nginx
-    restart: unless-stopped
-    volumes:
-      - ./nginx/build:/usr/share/nginx/html
-    ports:
-      - 80:80
-    command: ["nginx","-g","daemon off;"]
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DATABASE=test
 
 networks:
   app-network:
     driver: bridge
 
 volumes:
-  dbdata:
-  node_modules2: 
-  node_modules1: 
+  db:
+  app:
