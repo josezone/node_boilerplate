@@ -10,7 +10,7 @@ services:
       - "9229:9229"
     env_file: .env
     volumes:
-      - app:/home/node/app
+      - .:/home/node/app
     networks:
       - app-network
 
@@ -23,7 +23,7 @@ services:
     networks:
       - app-network
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=test
