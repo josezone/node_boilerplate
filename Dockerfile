@@ -6,5 +6,4 @@ RUN npm i forever@latest -g
 COPY package.json package-lock.json* ./
 RUN apk add --no-cache --virtual .build-deps alpine-sdk python  && npm install --silent && npm cache clean --force && apk del .build-deps
 COPY . .
-RUN chmod +x ./start.sh
-CMD ./start.sh
+CMD npm run start

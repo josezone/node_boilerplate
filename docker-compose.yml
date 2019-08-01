@@ -13,6 +13,7 @@ services:
       - .:/home/node/app
     networks:
       - app-network
+    command: npm run dev
 
   db:
     image: postgres:11.4-alpine

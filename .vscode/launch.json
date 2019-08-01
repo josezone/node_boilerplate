@@ -2,17 +2,28 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Node Inspector",
-      "type": "node",
-      "request": "launch",
-      "args": ["${workspaceRoot}/src/index.ts"],
-      "runtimeArgs": ["-r", "ts-node/register"],
-      "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
-      "internalConsoleOptions": "openOnSessionStart",
-      "env": {
-        "TS_NODE_IGNORE": "false"
-      }
+			"name": "Node Inspector",
+			"type": "node",
+			"request": "launch",
+			"args": ["${workspaceRoot}/src/index.ts"],
+			"runtimeArgs": ["-r", "ts-node/register"],
+			"cwd": "${workspaceRoot}",
+			"protocol": "inspector",
+			"internalConsoleOptions": "openOnSessionStart",
+			"env": {
+				"TS_NODE_IGNORE": "false"
+			}
+		},
+    {
+        "name": "Docker: Attach to Node",
+        "type": "node",
+        "request": "attach",
+        "port": 9229,
+        "address": "localhost",
+        "localRoot": "${workspaceFolder}",
+        "remoteRoot": "${workspaceFolder}",
+        "protocol": "inspector",
+        "restart": true
     }
   ]
 }
