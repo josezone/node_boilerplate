@@ -7,7 +7,9 @@ import { VALIDATOR_ERROR } from '../const/types';
 @provide(VALIDATOR_ERROR)
 class ValidatorError {
   handle(result: ValidationError[], developerCode: string, res: Response) {
-    const message: string[] = result.map(items =>items.constraints[Object.keys(items.constraints)[0]]);
+    const message: string[] = result.map(
+      items => items.constraints[Object.keys(items.constraints)[0]]
+    );
     res.status(412).json({
       error: {
         message,
@@ -15,6 +17,6 @@ class ValidatorError {
         code: 412,
         developerMessage: 'validation error',
       },
-    })
+    });
   }
 }
