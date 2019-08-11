@@ -1,1 +1,1 @@
-export const VALIDATION_REGISTER = '0000';
+export const VALIDATION_LOGIN = '0000';

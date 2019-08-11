@@ -11,21 +11,13 @@ import {
   LOGIN_VALIDATOR,
   REGISTER_VALIDATOR,
   USER_SERVICE,
+  VALIDATOR,
 } from '../../const/types';
 import { UserServiceInterface } from './services/user.interface';
 
 @controller('/user')
 class UserController extends BaseHttpController {
   @inject(USER_SERVICE) private userService!: UserServiceInterface;
-
-  @httpPost('/register', REGISTER_VALIDATOR)
-  private register(
-    @requestParam('email') email: string,
-    res: Response,
-    next: NextFunction
-  ): string {
-    return this.userService.register(email);
-  }
 
   @httpPost('/login', LOGIN_VALIDATOR)
   private login(

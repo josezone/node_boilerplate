@@ -1,34 +1,37 @@
+import { transformAndValidate } from 'class-transformer-validator';
+import { IsEmail, IsString } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import { inject } from 'inversify';
 import { provide } from 'inversify-binding-decorators';
 import { BaseMiddleware } from 'inversify-express-utils';
 
-import * as Joi from '@hapi/joi';
-
-import { VALIDATION_REGISTER } from '../../../const/error';
-import { LOGIN_VALIDATOR, VALIDATOR_ERROR } from '../../../const/types';
+import { VALIDATION_LOGIN } from '../../../const/error';
+import {
+  ASYNC_LOADER,
+  LOGIN_VALIDATOR,
+  VALIDATOR_ERROR,
+} from '../../../const/types';
+import { AsyncLoaderInterface } from '../../../utility/asyncLoader.interface';
 import { ValidatorErrorInterface } from '../../../utility/handleValidatorError.interface';
+
+class Validate {
+  @IsEmail()
+  email!: string;
+
+  @IsString()
+  password!: string;
+}
 
 @provide(LOGIN_VALIDATOR)
 class LoginValidator extends BaseMiddleware {
+  @inject(ASYNC_LOADER) private asyncLoader!: AsyncLoaderInterface;
   @inject(VALIDATOR_ERROR) private validatorError!: ValidatorErrorInterface;
-
-  private schema = Joi.object()
-    .keys({
-      email: Joi.string()
-        .email({ minDomainSegments: 2 })
-        .required(),
-      password: Joi.string().required(),
-    })
-    .options({ abortEarly: false });
-
-  handler(req: Request, res: Response, next: NextFunction) {
-    const result: Joi.ValidationResult<{}> = Joi.validate(
-      req.body,
-      this.schema
+  async handler(req: Request, res: Response, next: NextFunction) {
+    const [error, data] = await this.asyncLoader.load(
+      transformAndValidate(Validate, req.body)
     );
-    if (result.error) {
-      this.validatorError.handle(result, VALIDATION_REGISTER, res);
+    if (error) {
+      this.validatorError.handle(error, VALIDATION_LOGIN, res);
     } else {
       next();
     }

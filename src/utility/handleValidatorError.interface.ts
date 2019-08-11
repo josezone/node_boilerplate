@@ -1,9 +1,9 @@
+import { ValidationError } from 'class-validator';
 import { Response } from 'express';
-import * as Joi from '@hapi/joi';
 
 export interface ValidatorErrorInterface {
   handle(
-    result: Joi.ValidationResult<{}>,
+    result: ValidationError[],
     developerCode: string,
     res: Response
   ): void;
