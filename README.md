@@ -1,6 +1,6 @@
 # Node Boilerplate
 
-[![N|Solid](https://www.qburst.com/images/responsive/QBlogo.svg)](https://code.qburst.com/joset/node-auth-sequlize-jwt-singletenant)
+[![N|Solid](https://nodejs.org/static/images/logo.svg)](https://github.com/josezone/node_boilerplate.git)
 
 Node Boilerplate is used for quickly start any node project.
 
